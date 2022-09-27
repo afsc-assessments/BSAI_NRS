@@ -1,8 +1,8 @@
 #Query the survey age comp data for unidentified and NRS in the EBS trawl survey
 
+outdir = "C:\\Users\\carey.mcgilliard\\Work\\FlatfishAssessments\\2022\\NRS\\Data\\Survey_Comps"
 
-
-SurveyAgeComp<-function(user,pwd) {
+SurveyAgeComp<-function(user,pwd,outdir) {
 
 AFSC <- odbcConnect("AFSC","mcgilliardc","oopscircle12$") #mcgilliardc
 
@@ -28,5 +28,6 @@ agetot<-ages %>% group_by(YEAR,SEX) %>% summarise(TAges = sum( AGEPOP))
 Pagecomp<-full_join(agecomp,agetot) %>% mutate(Prop = CAges/TAges)
 
 #Look up whether it's females then males or vice versa for input to dat file
+write.csv(Pagecomp,file.path(outdir,"SurveyAgeComp.csv"))
 return(Pagecomp)
 }
