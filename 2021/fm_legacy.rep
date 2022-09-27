@@ -342,19 +342,19 @@ Spawning_biomass_per_recruit_from_F40_harvest_rate 0
 Spawning_biomass_per_recruit_from_F35_harvest_rate 0
 Spawning_biomass_per_recruit_from_F30_harvest_rate 0
 Projected_spawning_biomass 
-F40_spawning_biomass  2.15083e-316 0 0 0 0 0 0 0 0 0
-F35_spawning_biomass  2.15083e-316 0 0 0 0 0 0 0 0 0
-F30_spawning_biomass  2.15083e-316 0 0 0 0 0 0 0 0 0
-F=0_spawning_biomass  2.15083e-316 0 0 0 0 0 0 0 0 0
+F40_spawning_biomass  5.06169e-317 0 0 0 0 0 0 0 0 0
+F35_spawning_biomass  5.06172e-317 0 0 0 0 0 0 0 0 0
+F30_spawning_biomass  5.06174e-317 0 0 0 0 0 0 0 0 0
+F=0_spawning_biomass  5.06177e-317 0 0 0 0 0 0 0 0 0
 Projected_total_biomass 
-F40_total_biomass  2.15084e-316 0 0 0 0 0 0 0 0 0
-F35_total_biomass  2.15084e-316 0 0 0 0 0 0 0 0 0
-F30_total_biomass  2.15084e-316 0 0 0 0 0 0 0 0 0
-F=0_total_biomass  2.15085e-316 0 0 0 0 0 0 0 0 0
+F40_total_biomass  5.06181e-317 0 0 0 0 0 0 0 0 0
+F35_total_biomass  5.06184e-317 0 0 0 0 0 0 0 0 0
+F30_total_biomass  5.06186e-317 0 0 0 0 0 0 0 0 0
+F=0_total_biomass  5.06188e-317 0 0 0 0 0 0 0 0 0
 Projected_catch 
-F40_harvest  2.15082e-316 0 0 0 0 0 0 0 0 0
-F35_harvest  2.15082e-316 0 0 0 0 0 0 0 0 0
-three-yr-mean_harvest 2.15082e-316 0 0 0 0 0 0 0 0 0
+F40_harvest  5.0616e-317 0 0 0 0 0 0 0 0 0
+F35_harvest  5.06162e-317 0 0 0 0 0 0 0 0 0
+three-yr-mean_harvest 5.06165e-317 0 0 0 0 0 0 0 0 0
 F=0_harvest  0 0 0 0 0 0 0 0 0 0 0 
 
 Likelihood_Components 
@@ -1235,19 +1235,19 @@ Spawning_biomass_per_recruit_from_F40_harvest_rate 0
 Spawning_biomass_per_recruit_from_F35_harvest_rate 0
 Spawning_biomass_per_recruit_from_F30_harvest_rate 0
 Projected_spawning_biomass 
-F40_spawning_biomass  2.15083e-316 0 0 0 0 0 0 0 0 0
-F35_spawning_biomass  2.15083e-316 0 0 0 0 0 0 0 0 0
-F30_spawning_biomass  2.15083e-316 0 0 0 0 0 0 0 0 0
-F=0_spawning_biomass  2.15083e-316 0 0 0 0 0 0 0 0 0
+F40_spawning_biomass  5.06169e-317 0 0 0 0 0 0 0 0 0
+F35_spawning_biomass  5.06172e-317 0 0 0 0 0 0 0 0 0
+F30_spawning_biomass  5.06174e-317 0 0 0 0 0 0 0 0 0
+F=0_spawning_biomass  5.06177e-317 0 0 0 0 0 0 0 0 0
 Projected_total_biomass 
-F40_total_biomass  2.15084e-316 0 0 0 0 0 0 0 0 0
-F35_total_biomass  2.15084e-316 0 0 0 0 0 0 0 0 0
-F30_total_biomass  2.15084e-316 0 0 0 0 0 0 0 0 0
-F=0_total_biomass  2.15085e-316 0 0 0 0 0 0 0 0 0
+F40_total_biomass  5.06181e-317 0 0 0 0 0 0 0 0 0
+F35_total_biomass  5.06184e-317 0 0 0 0 0 0 0 0 0
+F30_total_biomass  5.06186e-317 0 0 0 0 0 0 0 0 0
+F=0_total_biomass  5.06188e-317 0 0 0 0 0 0 0 0 0
 Projected_catch 
-F40_harvest  2.15082e-316 0 0 0 0 0 0 0 0 0
-F35_harvest  2.15082e-316 0 0 0 0 0 0 0 0 0
-three-yr-mean_harvest 2.15082e-316 0 0 0 0 0 0 0 0 0
+F40_harvest  5.0616e-317 0 0 0 0 0 0 0 0 0
+F35_harvest  5.06162e-317 0 0 0 0 0 0 0 0 0
+three-yr-mean_harvest 5.06165e-317 0 0 0 0 0 0 0 0 0
 F=0_harvest  0 0 0 0 0 0 0 0 0 0 0 
 
 Likelihood_Components 
@@ -2128,19 +2128,19 @@ Spawning_biomass_per_recruit_from_F40_harvest_rate 0
 Spawning_biomass_per_recruit_from_F35_harvest_rate 0
 Spawning_biomass_per_recruit_from_F30_harvest_rate 0
 Projected_spawning_biomass 
-F40_spawning_biomass  2.15083e-316 0 0 0 0 0 0 0 0 0
-F35_spawning_biomass  2.15083e-316 0 0 0 0 0 0 0 0 0
-F30_spawning_biomass  2.15083e-316 0 0 0 0 0 0 0 0 0
-F=0_spawning_biomass  2.15083e-316 0 0 0 0 0 0 0 0 0
+F40_spawning_biomass  5.06169e-317 0 0 0 0 0 0 0 0 0
+F35_spawning_biomass  5.06172e-317 0 0 0 0 0 0 0 0 0
+F30_spawning_biomass  5.06174e-317 0 0 0 0 0 0 0 0 0
+F=0_spawning_biomass  5.06177e-317 0 0 0 0 0 0 0 0 0
 Projected_total_biomass 
-F40_total_biomass  2.15084e-316 0 0 0 0 0 0 0 0 0
-F35_total_biomass  2.15084e-316 0 0 0 0 0 0 0 0 0
-F30_total_biomass  2.15084e-316 0 0 0 0 0 0 0 0 0
-F=0_total_biomass  2.15085e-316 0 0 0 0 0 0 0 0 0
+F40_total_biomass  5.06181e-317 0 0 0 0 0 0 0 0 0
+F35_total_biomass  5.06184e-317 0 0 0 0 0 0 0 0 0
+F30_total_biomass  5.06186e-317 0 0 0 0 0 0 0 0 0
+F=0_total_biomass  5.06188e-317 0 0 0 0 0 0 0 0 0
 Projected_catch 
-F40_harvest  2.15082e-316 0 0 0 0 0 0 0 0 0
-F35_harvest  2.15082e-316 0 0 0 0 0 0 0 0 0
-three-yr-mean_harvest 2.15082e-316 0 0 0 0 0 0 0 0 0
+F40_harvest  5.0616e-317 0 0 0 0 0 0 0 0 0
+F35_harvest  5.06162e-317 0 0 0 0 0 0 0 0 0
+three-yr-mean_harvest 5.06165e-317 0 0 0 0 0 0 0 0 0
 F=0_harvest  0 0 0 0 0 0 0 0 0 0 0 
 
 Likelihood_Components 
@@ -3021,19 +3021,19 @@ Spawning_biomass_per_recruit_from_F40_harvest_rate 0
 Spawning_biomass_per_recruit_from_F35_harvest_rate 0
 Spawning_biomass_per_recruit_from_F30_harvest_rate 0
 Projected_spawning_biomass 
-F40_spawning_biomass  2.15083e-316 0 0 0 0 0 0 0 0 0
-F35_spawning_biomass  2.15083e-316 0 0 0 0 0 0 0 0 0
-F30_spawning_biomass  2.15083e-316 0 0 0 0 0 0 0 0 0
-F=0_spawning_biomass  2.15083e-316 0 0 0 0 0 0 0 0 0
+F40_spawning_biomass  5.06169e-317 0 0 0 0 0 0 0 0 0
+F35_spawning_biomass  5.06172e-317 0 0 0 0 0 0 0 0 0
+F30_spawning_biomass  5.06174e-317 0 0 0 0 0 0 0 0 0
+F=0_spawning_biomass  5.06177e-317 0 0 0 0 0 0 0 0 0
 Projected_total_biomass 
-F40_total_biomass  2.15084e-316 0 0 0 0 0 0 0 0 0
-F35_total_biomass  2.15084e-316 0 0 0 0 0 0 0 0 0
-F30_total_biomass  2.15084e-316 0 0 0 0 0 0 0 0 0
-F=0_total_biomass  2.15085e-316 0 0 0 0 0 0 0 0 0
+F40_total_biomass  5.06181e-317 0 0 0 0 0 0 0 0 0
+F35_total_biomass  5.06184e-317 0 0 0 0 0 0 0 0 0
+F30_total_biomass  5.06186e-317 0 0 0 0 0 0 0 0 0
+F=0_total_biomass  5.06188e-317 0 0 0 0 0 0 0 0 0
 Projected_catch 
-F40_harvest  2.15082e-316 0 0 0 0 0 0 0 0 0
-F35_harvest  2.15082e-316 0 0 0 0 0 0 0 0 0
-three-yr-mean_harvest 2.15082e-316 0 0 0 0 0 0 0 0 0
+F40_harvest  5.0616e-317 0 0 0 0 0 0 0 0 0
+F35_harvest  5.06162e-317 0 0 0 0 0 0 0 0 0
+three-yr-mean_harvest 5.06165e-317 0 0 0 0 0 0 0 0 0
 F=0_harvest  0 0 0 0 0 0 0 0 0 0 0 
 
 Likelihood_Components 
@@ -3914,19 +3914,19 @@ Spawning_biomass_per_recruit_from_F40_harvest_rate 0
 Spawning_biomass_per_recruit_from_F35_harvest_rate 0
 Spawning_biomass_per_recruit_from_F30_harvest_rate 0
 Projected_spawning_biomass 
-F40_spawning_biomass  2.15083e-316 0 0 0 0 0 0 0 0 0
-F35_spawning_biomass  2.15083e-316 0 0 0 0 0 0 0 0 0
-F30_spawning_biomass  2.15083e-316 0 0 0 0 0 0 0 0 0
-F=0_spawning_biomass  2.15083e-316 0 0 0 0 0 0 0 0 0
+F40_spawning_biomass  5.06169e-317 0 0 0 0 0 0 0 0 0
+F35_spawning_biomass  5.06172e-317 0 0 0 0 0 0 0 0 0
+F30_spawning_biomass  5.06174e-317 0 0 0 0 0 0 0 0 0
+F=0_spawning_biomass  5.06177e-317 0 0 0 0 0 0 0 0 0
 Projected_total_biomass 
-F40_total_biomass  2.15084e-316 0 0 0 0 0 0 0 0 0
-F35_total_biomass  2.15084e-316 0 0 0 0 0 0 0 0 0
-F30_total_biomass  2.15084e-316 0 0 0 0 0 0 0 0 0
-F=0_total_biomass  2.15085e-316 0 0 0 0 0 0 0 0 0
+F40_total_biomass  5.06181e-317 0 0 0 0 0 0 0 0 0
+F35_total_biomass  5.06184e-317 0 0 0 0 0 0 0 0 0
+F30_total_biomass  5.06186e-317 0 0 0 0 0 0 0 0 0
+F=0_total_biomass  5.06188e-317 0 0 0 0 0 0 0 0 0
 Projected_catch 
-F40_harvest  2.15082e-316 0 0 0 0 0 0 0 0 0
-F35_harvest  2.15082e-316 0 0 0 0 0 0 0 0 0
-three-yr-mean_harvest 2.15082e-316 0 0 0 0 0 0 0 0 0
+F40_harvest  5.0616e-317 0 0 0 0 0 0 0 0 0
+F35_harvest  5.06162e-317 0 0 0 0 0 0 0 0 0
+three-yr-mean_harvest 5.06165e-317 0 0 0 0 0 0 0 0 0
 F=0_harvest  0 0 0 0 0 0 0 0 0 0 0 
 
 Likelihood_Components 
@@ -4807,19 +4807,19 @@ Spawning_biomass_per_recruit_from_F40_harvest_rate 0
 Spawning_biomass_per_recruit_from_F35_harvest_rate 0
 Spawning_biomass_per_recruit_from_F30_harvest_rate 0
 Projected_spawning_biomass 
-F40_spawning_biomass  2.15083e-316 0 0 0 0 0 0 0 0 0
-F35_spawning_biomass  2.15083e-316 0 0 0 0 0 0 0 0 0
-F30_spawning_biomass  2.15083e-316 0 0 0 0 0 0 0 0 0
-F=0_spawning_biomass  2.15083e-316 0 0 0 0 0 0 0 0 0
+F40_spawning_biomass  5.06169e-317 0 0 0 0 0 0 0 0 0
+F35_spawning_biomass  5.06172e-317 0 0 0 0 0 0 0 0 0
+F30_spawning_biomass  5.06174e-317 0 0 0 0 0 0 0 0 0
+F=0_spawning_biomass  5.06177e-317 0 0 0 0 0 0 0 0 0
 Projected_total_biomass 
-F40_total_biomass  2.15084e-316 0 0 0 0 0 0 0 0 0
-F35_total_biomass  2.15084e-316 0 0 0 0 0 0 0 0 0
-F30_total_biomass  2.15084e-316 0 0 0 0 0 0 0 0 0
-F=0_total_biomass  2.15085e-316 0 0 0 0 0 0 0 0 0
+F40_total_biomass  5.06181e-317 0 0 0 0 0 0 0 0 0
+F35_total_biomass  5.06184e-317 0 0 0 0 0 0 0 0 0
+F30_total_biomass  5.06186e-317 0 0 0 0 0 0 0 0 0
+F=0_total_biomass  5.06188e-317 0 0 0 0 0 0 0 0 0
 Projected_catch 
-F40_harvest  2.15082e-316 0 0 0 0 0 0 0 0 0
-F35_harvest  2.15082e-316 0 0 0 0 0 0 0 0 0
-three-yr-mean_harvest 2.15082e-316 0 0 0 0 0 0 0 0 0
+F40_harvest  5.0616e-317 0 0 0 0 0 0 0 0 0
+F35_harvest  5.06162e-317 0 0 0 0 0 0 0 0 0
+three-yr-mean_harvest 5.06165e-317 0 0 0 0 0 0 0 0 0
 F=0_harvest  0 0 0 0 0 0 0 0 0 0 0 
 
 Likelihood_Components 
@@ -5700,19 +5700,19 @@ Spawning_biomass_per_recruit_from_F40_harvest_rate 0
 Spawning_biomass_per_recruit_from_F35_harvest_rate 0
 Spawning_biomass_per_recruit_from_F30_harvest_rate 0
 Projected_spawning_biomass 
-F40_spawning_biomass  2.15083e-316 0 0 0 0 0 0 0 0 0
-F35_spawning_biomass  2.15083e-316 0 0 0 0 0 0 0 0 0
-F30_spawning_biomass  2.15083e-316 0 0 0 0 0 0 0 0 0
-F=0_spawning_biomass  2.15083e-316 0 0 0 0 0 0 0 0 0
+F40_spawning_biomass  5.06169e-317 0 0 0 0 0 0 0 0 0
+F35_spawning_biomass  5.06172e-317 0 0 0 0 0 0 0 0 0
+F30_spawning_biomass  5.06174e-317 0 0 0 0 0 0 0 0 0
+F=0_spawning_biomass  5.06177e-317 0 0 0 0 0 0 0 0 0
 Projected_total_biomass 
-F40_total_biomass  2.15084e-316 0 0 0 0 0 0 0 0 0
-F35_total_biomass  2.15084e-316 0 0 0 0 0 0 0 0 0
-F30_total_biomass  2.15084e-316 0 0 0 0 0 0 0 0 0
-F=0_total_biomass  2.15085e-316 0 0 0 0 0 0 0 0 0
+F40_total_biomass  5.06181e-317 0 0 0 0 0 0 0 0 0
+F35_total_biomass  5.06184e-317 0 0 0 0 0 0 0 0 0
+F30_total_biomass  5.06186e-317 0 0 0 0 0 0 0 0 0
+F=0_total_biomass  5.06188e-317 0 0 0 0 0 0 0 0 0
 Projected_catch 
-F40_harvest  2.15082e-316 0 0 0 0 0 0 0 0 0
-F35_harvest  2.15082e-316 0 0 0 0 0 0 0 0 0
-three-yr-mean_harvest 2.15082e-316 0 0 0 0 0 0 0 0 0
+F40_harvest  5.0616e-317 0 0 0 0 0 0 0 0 0
+F35_harvest  5.06162e-317 0 0 0 0 0 0 0 0 0
+three-yr-mean_harvest 5.06165e-317 0 0 0 0 0 0 0 0 0
 F=0_harvest  0 0 0 0 0 0 0 0 0 0 0 
 
 Likelihood_Components 
