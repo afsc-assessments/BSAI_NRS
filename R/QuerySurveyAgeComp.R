@@ -41,7 +41,7 @@ Pagecomp<-Pagecomp %>% select(YEAR,SEX,AGE,Prop)
 
 #organize by females on left and males on right, bin at the plus group age
 #add 100 to male ages to denote they are males
-Pagecomp<-Pagecomp %>% mutate(AGE = replace(AGE, SEX==2,100+AGE))
+Pagecomp<-Pagecomp %>% mutate(AGE = replace(AGE, SEX==1,100+AGE))
 Pagecomp<-Pagecomp %>% group_by(YEAR,AGE) %>% select(YEAR,AGE,Prop)
 
 #thegrid<-expand.grid(AGE=seq(from =1,to=20,by=1),SEX = c(1,2),YEAR = unique(Pagecomp$YEAR))
