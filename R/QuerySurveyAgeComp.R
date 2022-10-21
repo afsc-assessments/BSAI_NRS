@@ -2,10 +2,10 @@
 library(RODBC)
 library(dplyr)
 library(tidyr)
-AFSC <- odbcConnect("AFSC","mcgilliardc","oopscircle12$") #mcgilliardc
+AFSC <- odbcConnect("AFSC",user,pwd) #mcgilliardc
 outdir = "C:\\Users\\carey.mcgilliard\\Work\\FlatfishAssessments\\2022\\NRS\\Data\\Survey_Comps"
 #Example:
-myages<-SurveyAgeComp(DB = AFSC,user = "mcgilliardc",pwd = "oopscircle12$",outdir = outdir)
+myages<-SurveyAgeComp(DB = AFSC,user = "mcgilliardc",pwd = "oopstriangle13$",outdir = outdir)
 SurveyAgeComp<-function(DB,user,pwd,outdir) {
 
 thequery<-paste0("SELECT haehnr.agecomp_ebs_standard_stratum.species_code,\n ",
