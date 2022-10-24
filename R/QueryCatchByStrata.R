@@ -1,4 +1,6 @@
 #Query catch by strata and write the main control file for sam.tpl
+#Must run QueryLengthsForSampler.R and QueryAgesForSampler.R first
+
 
 library(tidyverse)
 library(RODBC)
@@ -6,7 +8,11 @@ library(lubridate)
                 
 AKFIN<- odbcConnect("AKFIN","","") #cmcgilliard
 FmpArea <- 'BSAI' 
-SpeciesCode<-'RSOL' #and also 120
+SpeciesCode<-'RSOL' 
+minage<-1
+maxage<-20
+minlen<-10
+maxlen<-55
 
 #YFS StrataMap (strata are times of year here, but can also be NMFS_AREA or other)
 #StrataMap<-data.frame(STRATA =c(1,1,1,1,2,2,2,2,3,3,3,3),
@@ -15,6 +21,7 @@ SpeciesCode<-'RSOL' #and also 120
 #NRS StrataMap (only one strata for BSAI NRS right now)
 StrataMap<-data.frame(STRATA =rep(1,n = 12),
                       MONTH = seq(from = 1,to = 12,by = 1)) #NRS: 1 strata
+NumStrata<-max(StrataMap$STRATA)
 
 MyQuery<-paste0("SELECT council.comprehensive_blend_ca.week_end_date,\n ",
 "council.comprehensive_blend_ca.catch_activity_date,\n ",
@@ -30,7 +37,42 @@ MyQuery<-paste0("SELECT council.comprehensive_blend_ca.week_end_date,\n ",
 "council.comprehensive_blend_ca.fmp_gear,\n ",
 "council.comprehensive_blend_ca.species_name\n ",
 "FROM council.comprehensive_blend_ca\n ",
-"WHERE council.comprehensive_blend_ca.species_group_code =",SpeciesCode,"\n ",
-"AND council.comprehensive_blend_ca.fmp_area = ",FmpArea)
+"WHERE council.comprehensive_blend_ca.species_group_code = 'RSOL'","\n ",
+"AND council.comprehensive_blend_ca.fmp_area = 'BSAI'")
 
 catchbio<-sqlQuery(AKFIN,MyQuery)
+catchbio$MONTH<-month(as.Date(catchbio$WEEK_END_DATE))
+
+catchbio<-full_join(catchbio,StrataMap)
+c.df<-catchbio %>% group_by(YEAR,STRATA) %>% summarise(cbio = sum(WEIGHT_POSTED))
+
+years<-sort(unique(AgeLength.df$YEAR))
+for (y in 1:length(years)) {
+  c<-c.df%>% filter(YEAR==years[y])
+  myvec<-c$cbio
+  #write.table(myvec,file = file.path(outdir,paste0("catchbystrata",years[y],".dat")),quote=FALSE,row.names = FALSE,col.names = FALSE)
+  nage<-read.table(file.path(outdir,paste0("nages",years[y],".dat")))
+  nlen<-read.table(file.path(outdir,paste0("nlens",years[y],".dat")))
+  
+  mystuff<-paste(
+   years[y],"\n",
+   "Data/age",years[y],".dat","\n",
+   "Data/len",years[y],".dat","\n",
+   nage,"\n",
+   nlen,"\n",
+   minage,"\n",
+   maxage,"\n",
+   minlen,"\n",
+   maxlen,"\n",
+   NumStrata,"\n",
+   myvec,"\n",
+   "results/Est_",years[y],".dat",sep = "")
+  
+  write(noquote(mystuff),file.path(outdir,paste0("sam",years[y],".dat")),ncolumns=100, append=F)
+#  write.table(years[y],file =file.path(outdir,paste0("sam",years[y],".dat")),quote=FALSE,row.names = FALSE,col.names = FALSE)
+  
+#  write.table(myvec,file = file.path(outdir,paste0("sam",years[y],".dat")),quote=FALSE,row.names = FALSE,col.names = FALSE,append = TRUE)
+  
+}
+
+
