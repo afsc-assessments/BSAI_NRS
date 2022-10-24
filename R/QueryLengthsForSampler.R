@@ -15,7 +15,7 @@ library(lubridate)
 library(tidyverse)
 
 #Connect to the database
-AFSC <- odbcConnect("AFSC","mcgilliardc","oopstriangle13$") #mcgilliardc
+AFSC <- odbcConnect("AFSC","","") #mcgilliardc
 FmpArea <- "500 and 544" 
 SpeciesCode<-"(104,120)" #and also 120
 
