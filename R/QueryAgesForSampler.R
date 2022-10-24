@@ -12,6 +12,7 @@
 library(RODBC)
 library(dplyr)
 library(lubridate)
+library(tidyverse)
 
 #Connect to the database
 AFSC <- odbcConnect("AFSC",user,pwd) #mcgilliardc
