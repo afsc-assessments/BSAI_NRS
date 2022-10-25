@@ -9,26 +9,28 @@
 #weight?
 #length?
 
-library(RODBC)
-library(dplyr)
-library(lubridate)
-library(tidyverse)
+# library(RODBC)
+# library(dplyr)
+# library(lubridate)
+# library(tidyverse)
+# 
+# #Connect to the database
+# AFSC <- odbcConnect("AFSC","","") #mcgilliardc
+# FmpArea <- "500 and 544" 
+# SpeciesCode<-"(104,120)" #and also 120
+# 
+# #YFS StrataMap (strata are times of year here, but can also be NMFS_AREA or other)
+# #StrataMap<-data.frame(STRATA =c(1,1,1,1,2,2,2,2,3,3,3,3),
+# #                      MONTH = seq(from = 1,to = 12,by = 1)) #YFS: 3 strata over the months of the year
+# 
+# #NRS StrataMap (only one strata for BSAI NRS right now)
+# StrataMap<-data.frame(STRATA =rep(1,n = 12),
+#                       MONTH = seq(from = 1,to = 12,by = 1)) #NRS: 1 strata
+#   
+#   
+# outdir<-"C:/Users/carey.mcgilliard/Work/FlatfishAssessments/2022/NRS/Data/Fishery_Ages"
 
-#Connect to the database
-AFSC <- odbcConnect("AFSC","","") #mcgilliardc
-FmpArea <- "500 and 544" 
-SpeciesCode<-"(104,120)" #and also 120
-
-#YFS StrataMap (strata are times of year here, but can also be NMFS_AREA or other)
-#StrataMap<-data.frame(STRATA =c(1,1,1,1,2,2,2,2,3,3,3,3),
-#                      MONTH = seq(from = 1,to = 12,by = 1)) #YFS: 3 strata over the months of the year
-
-#NRS StrataMap (only one strata for BSAI NRS right now)
-StrataMap<-data.frame(STRATA =rep(1,n = 12),
-                      MONTH = seq(from = 1,to = 12,by = 1)) #NRS: 1 strata
-  
-  
-outdir<-"C:/Users/carey.mcgilliard/Work/FlatfishAssessments/2022/NRS/Data/Fishery_Ages"
+SamAge<-function(AFSC,outdir,FmpArea,SpeciesCode,StrataMap) {
 #-------------------------------
 #either need to add something to this query to only query otolith samples OR need to use the squash_sp_type table.
 MyQuery<-paste0("SELECT to_char(OBSINT.DEBRIEFED_AGE_SQUASH_SP_TYPE.PORT_JOIN) as PORT_JOIN,\n ",
@@ -80,7 +82,13 @@ for (y in 1:length(years)) {
   write.table(nrow(agedata),file = file.path(outdir,paste0("nages",years[y],".dat")),quote = FALSE,col.names = FALSE,row.names = FALSE)
 }
 
-close(AFSC)
+nages<-nrow(agedata)
+ageinfo<-list()
+ageinfo$years<-years
+ageinfo$nages<-nrow(agedata)
+return(ageinfo)
+}
+
 #need a data file that looks like this for each year, named "age1991.dat" etc., one for each year:
 #Suspected columns are:
 #strata haulno sex age weight length 

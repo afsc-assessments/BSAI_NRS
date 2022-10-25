@@ -1,26 +1,32 @@
-#Query catch by strata and write the main control file for sam.tpl
-#Must run QueryLengthsForSampler.R and QueryAgesForSampler.R first
+# #Query catch by strata and write the main control file for sam.tpl
+# #Must run QueryLengthsForSampler.R and QueryAgesForSampler.R first
+# 
+# 
+# library(tidyverse)
+# library(RODBC)
+# library(lubridate)
+#                 
+# AKFIN<- odbcConnect("AKFIN","","") #cmcgilliard
+# FmpArea <- 'BSAI' 
+# SpeciesCode<-'RSOL' 
+# minage<-1
+# maxage<-20
+# minlen<-10
+# maxlen<-55
+# 
+# #YFS StrataMap (strata are times of year here, but can also be NMFS_AREA or other)
+# #StrataMap<-data.frame(STRATA =c(1,1,1,1,2,2,2,2,3,3,3,3),
+# #                      MONTH = seq(from = 1,to = 12,by = 1)) #YFS: 3 strata over the months of the year
+# 
+# #NRS StrataMap (only one strata for BSAI NRS right now)
+# StrataMap<-data.frame(STRATA =rep(1,n = 12),
+#                       MONTH = seq(from = 1,to = 12,by = 1)) #NRS: 1 strata
 
-
-library(tidyverse)
-library(RODBC)
-library(lubridate)
-                
-AKFIN<- odbcConnect("AKFIN","","") #cmcgilliard
-FmpArea <- 'BSAI' 
-SpeciesCode<-'RSOL' 
-minage<-1
-maxage<-20
-minlen<-10
-maxlen<-55
-
-#YFS StrataMap (strata are times of year here, but can also be NMFS_AREA or other)
-#StrataMap<-data.frame(STRATA =c(1,1,1,1,2,2,2,2,3,3,3,3),
-#                      MONTH = seq(from = 1,to = 12,by = 1)) #YFS: 3 strata over the months of the year
-
-#NRS StrataMap (only one strata for BSAI NRS right now)
-StrataMap<-data.frame(STRATA =rep(1,n = 12),
-                      MONTH = seq(from = 1,to = 12,by = 1)) #NRS: 1 strata
+#-------------------------------
+#CAUTION: RSOL is HARD WIRED IN TO THE QUERY RIGHT NOW! FIX THAT LATER!
+#-------------------------------
+SamDat<-function(AKFIN,outdir,FmpArea='BSAI',SpeciesCode='RSOL',minage,maxage,minlen,maxlen,StrataMap,years,nage,nlen) {
+  
 NumStrata<-max(StrataMap$STRATA)
 
 MyQuery<-paste0("SELECT council.comprehensive_blend_ca.week_end_date,\n ",
@@ -46,13 +52,13 @@ catchbio$MONTH<-month(as.Date(catchbio$WEEK_END_DATE))
 catchbio<-full_join(catchbio,StrataMap)
 c.df<-catchbio %>% group_by(YEAR,STRATA) %>% summarise(cbio = sum(WEIGHT_POSTED))
 
-years<-sort(unique(AgeLength.df$YEAR))
+#years<-sort(unique(AgeLength.df$YEAR))
 for (y in 1:length(years)) {
   c<-c.df%>% filter(YEAR==years[y])
   myvec<-c$cbio
   #write.table(myvec,file = file.path(outdir,paste0("catchbystrata",years[y],".dat")),quote=FALSE,row.names = FALSE,col.names = FALSE)
-  nage<-read.table(file.path(outdir,paste0("nages",years[y],".dat")))
-  nlen<-read.table(file.path(outdir,paste0("nlens",years[y],".dat")))
+  #nage<-read.table(file.path(outdir,paste0("nages",years[y],".dat")))
+  #nlen<-read.table(file.path(outdir,paste0("nlens",years[y],".dat")))
   
   mystuff<-paste(
    years[y],"\n",
@@ -74,5 +80,5 @@ for (y in 1:length(years)) {
 #  write.table(myvec,file = file.path(outdir,paste0("sam",years[y],".dat")),quote=FALSE,row.names = FALSE,col.names = FALSE,append = TRUE)
   
 }
-
+}
 

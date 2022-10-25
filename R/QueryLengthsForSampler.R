@@ -1,34 +1,36 @@
-#Pull and format data for fishery age sampler
-#separate data file for each year
+# #Pull and format data for fishery age sampler
+# #separate data file for each year
+# 
+# #age file columns
+# #number of samples?
+# #a_tows (this means there was an aggregation over tows grouped by sex,age,weight,and length?)
+# #sex?
+# #age?
+# #weight?
+# #length?
+# 
+# library(RODBC)
+# library(dplyr)
+# library(lubridate)
+# library(tidyverse)
+# 
+# #Connect to the database
+# AFSC <- odbcConnect("AFSC","","") #mcgilliardc
+# FmpArea <- "500 and 544" 
+# SpeciesCode<-"(104,120)" #and also 120
+# 
+# #YFS StrataMap (strata are times of year here, but can also be NMFS_AREA or other)
+# #StrataMap<-data.frame(STRATA =c(1,1,1,1,2,2,2,2,3,3,3,3),
+# #                      MONTH = seq(from = 1,to = 12,by = 1)) #YFS: 3 strata over the months of the year
+# 
+# #NRS StrataMap (only one strata for BSAI NRS right now)
+# StrataMap<-data.frame(STRATA =rep(1,n = 12),
+#                       MONTH = seq(from = 1,to = 12,by = 1)) #NRS: 1 strata
+#   
+#   
+# outdir<-"C:/Users/carey.mcgilliard/Work/FlatfishAssessments/2022/NRS/Data/Fishery_Ages"
 
-#age file columns
-#number of samples?
-#a_tows (this means there was an aggregation over tows grouped by sex,age,weight,and length?)
-#sex?
-#age?
-#weight?
-#length?
-
-library(RODBC)
-library(dplyr)
-library(lubridate)
-library(tidyverse)
-
-#Connect to the database
-AFSC <- odbcConnect("AFSC","","") #mcgilliardc
-FmpArea <- "500 and 544" 
-SpeciesCode<-"(104,120)" #and also 120
-
-#YFS StrataMap (strata are times of year here, but can also be NMFS_AREA or other)
-#StrataMap<-data.frame(STRATA =c(1,1,1,1,2,2,2,2,3,3,3,3),
-#                      MONTH = seq(from = 1,to = 12,by = 1)) #YFS: 3 strata over the months of the year
-
-#NRS StrataMap (only one strata for BSAI NRS right now)
-StrataMap<-data.frame(STRATA =rep(1,n = 12),
-                      MONTH = seq(from = 1,to = 12,by = 1)) #NRS: 1 strata
-  
-  
-outdir<-"C:/Users/carey.mcgilliard/Work/FlatfishAssessments/2022/NRS/Data/Fishery_Ages"
+SamLength<-function(AFSC,outdir,FmpArea,SpeciesCode,StrataMap,years) {
 #-------------------------------
 #either need to add something to this query to only query otolith samples OR need to use the squash_sp_type table.
 MyQuery<-paste0("SELECT to_char(OBSINT.DEBRIEFED_LENGTH.PORT_JOIN) as PORT_JOIN,\n ",
@@ -68,7 +70,7 @@ Lengths.df<-full_join(Length.df,StrataMap)
 #save so you don't have to do the query every time
 save(Lengths.df,file = file.path(outdir,"BigFisheryLengths.Rdata"))
 
-years <-sort(unique(AgeLength.df$YEAR))
+#years <-sort(unique(AgeLength.df$YEAR))
 for (y in 1:length(years)) {
   lengthdata<-Lengths.df %>% filter(YEAR==years[y]) %>% select(HAUL_JOIN,PORT_JOIN,STRATA,SEXNO,LENGTH,FREQUENCY)
   lengthdata<-lengthdata %>% mutate(MAKEHAUL=ifelse(is.na(HAUL_JOIN),PORT_JOIN,HAUL_JOIN)  )
@@ -76,9 +78,11 @@ for (y in 1:length(years)) {
   write.table(lengthdata,file = file.path(outdir,paste0("length",years[y],".dat")),quote = FALSE,col.names = FALSE,row.names = FALSE)
   write.table(nrow(lengthdata),file = file.path(outdir,paste0("nlens",years[y],".dat")),quote = FALSE,col.names = FALSE,row.names = FALSE)
   
-  }
+}
 
-close(AFSC)
+return(nrow(lengthdata))
+}
+
 #need a data file that looks like this for each year, named "length1991.dat" etc., one for each year:
 #Suspected columns are:
 #strata haulno sex age length frequency
