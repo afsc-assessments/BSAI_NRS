@@ -49,8 +49,7 @@ MyQuery<-paste0("SELECT to_char(OBSINT.DEBRIEFED_AGE_SQUASH_SP_TYPE.PORT_JOIN) a
                 "SUBSTR(TO_CHAR(OBSINT.DEBRIEFED_AGE_SQUASH_SP_TYPE.HAUL_JOIN),1,8) AS HJ_FIRST1\n ",
                 "FROM OBSINT.DEBRIEFED_AGE_SQUASH_SP_TYPE\n ",
                 "WHERE OBSINT.DEBRIEFED_AGE_SQUASH_SP_TYPE.NMFS_AREA BETWEEN ",FmpArea,"\n ",
-                "AND OBSINT.DEBRIEFED_AGE_SQUASH_SP_TYPE.SPECIES in ",SpeciesCode,"\n ",
-                "AND OBSINT.DEBRIEFED_AGE_SQUASH_SP_TYPE.TYPE_1_OTOLITH = 'Y'")
+                "AND OBSINT.DEBRIEFED_AGE_SQUASH_SP_TYPE.SPECIES in ",SpeciesCode)
 
 AgeLength.df<-sqlQuery(AFSC,MyQuery)
 #AgeLength.df$HAUL_JOIN <- as.character(AgeLength.df$HAUL_JOIN)
