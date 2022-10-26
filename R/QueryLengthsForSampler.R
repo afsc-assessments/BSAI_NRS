@@ -71,16 +71,17 @@ Lengths.df<-full_join(Length.df,StrataMap)
 save(Lengths.df,file = file.path(outdir,"BigFisheryLengths.Rdata"))
 
 #years <-sort(unique(AgeLength.df$YEAR))
+numrows<-vector(mode="numeric",length=length(years))
 for (y in 1:length(years)) {
   lengthdata<-Lengths.df %>% filter(YEAR==years[y]) %>% select(HAUL_JOIN,PORT_JOIN,STRATA,SEXNO,LENGTH,FREQUENCY)
   lengthdata<-lengthdata %>% mutate(MAKEHAUL=ifelse(is.na(HAUL_JOIN),PORT_JOIN,HAUL_JOIN)  )
   lengthdata<-lengthdata %>% mutate(HAULNO=as.integer(as.factor(MAKEHAUL))) %>% select(STRATA,HAULNO,SEXNO,LENGTH,FREQUENCY)
   write.table(lengthdata,file = file.path(outdir,paste0("length",years[y],".dat")),quote = FALSE,col.names = FALSE,row.names = FALSE)
-  write.table(nrow(lengthdata),file = file.path(outdir,paste0("nlens",years[y],".dat")),quote = FALSE,col.names = FALSE,row.names = FALSE)
-  
+#  write.table(nrow(lengthdata),file = file.path(outdir,paste0("nlens",years[y],".dat")),quote = FALSE,col.names = FALSE,row.names = FALSE)
+   numrows[y]<-nrow(lengthdata) 
 }
 
-return(nrow(lengthdata))
+return(numrows)
 }
 
 #need a data file that looks like this for each year, named "length1991.dat" etc., one for each year:

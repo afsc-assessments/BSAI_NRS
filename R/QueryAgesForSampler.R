@@ -60,8 +60,9 @@ AgeLength.df$PORT_JOIN <- as.character(AgeLength.df$PORT_JOIN)
 AgeLength.df$SEASON<-quarters(as.Date(AgeLength.df$HAUL_OFFLOAD_DATE))
 AgeLength.df$MONTH<-month(as.Date(AgeLength.df$HAUL_OFFLOAD_DATE))
 
-AgeLength.df<-AgeLength.df %>% drop_na(AGE,LENGTH,WEIGHT)
+AgeLength.df<-AgeLength.df %>% drop_na(LENGTH,WEIGHT)
 AgeLength.df<-AgeLength.df %>% mutate(SEXNO=ifelse(SEX=="F",1,2))
+AgeLength.df<-AgeLength.df %>% mutate(AGE=ifelse(is.na(AGE),-9,AGE))
 
 #needs to be done within year.
 #AgeLength.df$MAKEHAUL<-ifelse(is.na(AgeLength.df$HAUL_JOIN),AgeLength.df$PORT_JOIN,AgeLength.df$HAUL_JOIN)            # Data come from at-sea or port
@@ -73,18 +74,19 @@ Ages.df<-full_join(AgeLength.df,StrataMap)
 save(Ages.df,file = file.path(outdir,"BigFisheryAges.Rdata"))
 
 years <-sort(unique(AgeLength.df$YEAR))
+numrows<-vector(mode="numeric",length=length(years))
 for (y in 1:length(years)) {
   agedata<-Ages.df %>% filter(YEAR==years[y]) %>% select(HAUL_JOIN,PORT_JOIN,STRATA,SEXNO,AGE,WEIGHT,LENGTH)
   agedata<-agedata %>% mutate(MAKEHAUL=ifelse(is.na(HAUL_JOIN),PORT_JOIN,HAUL_JOIN)  )
   agedata<-agedata %>% mutate(HAULNO=as.integer(as.factor(MAKEHAUL))) %>% select(STRATA,HAULNO,SEXNO,AGE,WEIGHT,LENGTH)
   write.table(agedata,file = file.path(outdir,paste0("age",years[y],".dat")),quote = FALSE,col.names = FALSE,row.names = FALSE)
   write.table(nrow(agedata),file = file.path(outdir,paste0("nages",years[y],".dat")),quote = FALSE,col.names = FALSE,row.names = FALSE)
-}
+  numrows[y]<-nrow(agedata)
+  }
 
-nages<-nrow(agedata)
 ageinfo<-list()
 ageinfo$years<-years
-ageinfo$nages<-nrow(agedata)
+ageinfo$nages<-numrows
 return(ageinfo)
 }
 
