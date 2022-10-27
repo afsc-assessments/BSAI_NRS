@@ -85,24 +85,23 @@ geom_bar(position="dodge2", stat='identity') + theme_few()+ facet_wrap(.~year)
 wdf <- pivot_longer(wtage,5:(maxage+4),names_to="age",values_to="weight") %>% 
        mutate(sex=ifelse(sex==1,"F","M")) %>% filter(weight>0)
 wdf <- wdf %>% group_by(year,sex,age) %>% summarise(weight=mean(weight)) %>% mutate(sex=as.factor(sex),age=as.numeric(age)) 
-wdf
+wdfp<-wdf
+wdf<-wdf %>% mutate(age = replace(age, sex=="M",100+as.numeric(age)))
+wdf<-wdf %>% group_by(year,age) %>% select(year,age,weight)
 
-thegrid<-expand.grid(sex = c("F","M"),age=c(seq(from =minage,to=maxage,by=1)),year = unique(cdf$year))
+thegrid<-expand.grid(age=c(seq(from =minage,to=maxage,by=1),seq(from = 100+minage,to=100+maxage,by=1)),year = unique(wdf$year))
 ExpandWts<-full_join(wdf,thegrid) 
 ExpandWts<-ExpandWts %>% replace_na(list(weight=0))
-WideWtsF<-ExpandWts %>% group_by(sex,year,age) %>% filter(sex=="F") %>% select(year,age,weight) %>% spread(age,weight)
-WideWtsF
-WideWtsM<-ExpandWts %>% group_by(sex,year,age) %>% filter(sex=="M") %>% select(year,age,weight) %>% spread(age,weight)
-WideWtsM
+WideWts<-ExpandWts %>% group_by(year,age) %>% select(year,age,weight) %>% spread(age,weight)
+WideWts
 
+write_csv(WideWtsF,"results/wtagesex.csv")
 
-write_csv(WideWtsF,"results/wtageF.csv")
-write_csv(WideWtsM,"results/wtageM.csv")
 
 # tswt <- pivot_wider(wdf,names_from=c(sex,age),values_from=weight)
 # write_csv(tswt,"results/wtagesex.csv")
 
-ggplot(wdf,aes(x=age,y=weight,fill=sex,color=sex)) + 
+ggplot(wdfp,aes(x=age,y=weight,fill=sex,color=sex)) + 
 geom_line(size=2, stat='identity') + theme_few()+ facet_wrap(.~year)
 
 
