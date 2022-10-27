@@ -10,15 +10,16 @@
 #' @export
 #' 
 #' setwd()
-Sampler_NRS <- function(yr=2014,do_all=TRUE,est=TRUE,maxlen=55,io=FALSE){
+Sampler_NRS <- function(yr=2014,do_all=TRUE,est=TRUE,maxlen=55,io=FALSE,ctl_file){
   ctl_file  <- paste0("data/sam_",yr,".dat")
   if (do_all)
   {
-    cd <- read.csv(paste("imported/catch",yr,".csv",sep=""),as.is=T,header=T)
+   # cd <- read.csv(paste("imported/catch",yr,".csv",sep=""),as.is=T,header=T)
     # hdr_cat <- read.csv("imported/hdr_cat_short.csv",as.is=T,header=F)
     # names(cd) <- hdr_cat
     aout_file <- paste("data/age",yr,".dat",sep="")
     lout_file <- paste("data/len",yr,".dat",sep="")
+    ctl_file<-paste("data/sam",yr,".dat",sep="")
     # Length data massage
     ldf       <- Get_LF(yr)
     adf       <- Get_Age(yr)
@@ -36,28 +37,28 @@ Sampler_NRS <- function(yr=2014,do_all=TRUE,est=TRUE,maxlen=55,io=FALSE){
     # n records of age data and length data
     lad <- dim(aout)[1]
     lld <- dim(lout)[1]
-    nstrata <- 1
-    cdf <- cd %>% filter(FMP_Subarea=="BS",Year==yr) %>%
-      transmute(
-        area=NMFS_Area,month=trunc(WED/100),
-        # note that in 1998 no NMFS area available for some catch so going on month for stratum 1 (Aseason), 
-        #  and 3 if not; simple trimester
-        strata=1., #ifelse(month<5,1,ifelse(month<9,2,3)), 
-        catch=Catch
-        )  %>% select(strata, catch) %>%
-      group_by(strata) %>% summarise(catch=sum(catch))
-      #sum(catch)
-    catch <- cdf$catch
-    #catch[1] <-  #Catch in stratum 1, A season all areas
-    #catch[2] <-  #Catch in stratum 2, B season areas 520 and higher (NW)
-    #catch[3] <-  #Catch in stratum 3, B season area 519 and lower (SE)
-    cat(sep= " \n",
-        yr , aout_file , lout_file , lad , lld ,
-        1 , 20 , 10 , maxlen , nstrata ,
-        catch[1], # catch[2], catch[3],
-        paste("results/Est_",yr,".dat",sep=""),
-        file = ctl_file
-    )
+    # nstrata <- 1
+    # cdf <- cd %>% filter(FMP_Subarea=="BS",Year==yr) %>%
+    #   transmute(
+    #     area=NMFS_Area,month=trunc(WED/100),
+    #     # note that in 1998 no NMFS area available for some catch so going on month for stratum 1 (Aseason), 
+    #     #  and 3 if not; simple trimester
+    #     strata=1., #ifelse(month<5,1,ifelse(month<9,2,3)), 
+    #     catch=Catch
+    #     )  %>% select(strata, catch) %>%
+    #   group_by(strata) %>% summarise(catch=sum(catch))
+    #   #sum(catch)
+    # catch <- cdf$catch
+    # #catch[1] <-  #Catch in stratum 1, A season all areas
+    # #catch[2] <-  #Catch in stratum 2, B season areas 520 and higher (NW)
+    # #catch[3] <-  #Catch in stratum 3, B season area 519 and lower (SE)
+    # cat(sep= " \n",
+    #     yr , aout_file , lout_file , lad , lld ,
+    #     1 , 20 , 10 , maxlen , nstrata ,
+    #     catch[1], # catch[2], catch[3],
+    #     paste("results/Est_",yr,".dat",sep=""),
+    #     file = ctl_file
+    # )
     # run sampler from commandline
     if (est) {
         if (io)

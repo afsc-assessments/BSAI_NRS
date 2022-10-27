@@ -4,56 +4,44 @@ library(lubridate)
 library(tidyverse)
 library(data.table)
 library(xtable)
+library(ggthemes)
 mytheme <- theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank())# element_line(colour="grey60", linetype="dashed"))
 mytheme <- mytheme + theme(text=element_text(size=18)) + theme(axis.title.x=element_text(size=22) ,axis.title.y=element_text(size=22))
 mytheme <- mytheme + theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank() )
 mytheme <- mytheme + theme( panel.background = element_rect(fill="white"), panel.border = element_rect(colour="black", fill=NA, size=.5))
-#q()
-#n
-#setwd("~/Onedrive/ebswp/data/sampler/cases/ebswp")
-#("~/Onedrive/sampler/cases/yfs")
-# source sampler.R
-setwd("C:/GitProjects/sampler/cases/nrs")
-#CRM commented out: source("../../sampleR/R/sampler_YFS.R")
-source("../../sampleR/R/sampler_NRS.R")
-#####Catch compilation#############################################################
-# Old format for catch
-#cd <- (read.csv(paste("imported/akfincat.csv",sep=""),as.is=T,header=F))
-hdr_cat <- read.csv("imported/hdr_cat_short.csv",as.is=T,header=F)
-# New format for catch from saved akfin run
-cd        <- (read.csv(paste("imported/akfin_cat.csv",sep=""),as.is=T,header=T))
-hdr_cat   <- read.csv("imported/hdr_cat.csv",as.is=T,header=F)
-#hdr_cat   <- read.csv("imported/hdr_cat_short.csv",as.is=T,header=F)
-cd <- cd[,c(1,20,21,22,15,16,17,23,19,27,4 )]
-names(cd) <- (hdr_cat[c(1,20,21,22,15,16,17,23,19,27,4 )])
-# Write all the catch files from R instead of awk...
-#   subset data.table to be columns used by sampler
 
-dd <- data.table(cd)
-names(cd)
-for (yr in 1991:2020){
-  write.csv( dd[Year==yr,,], file=paste0("imported/catch",yr,".csv"),row.names=FALSE)
+
+setwd(outdir)
+source("C:/GitProjects/BSAI_NRS/R/sampler_NRS_functions.R", echo=TRUE)
+SetBS(n=1000) #set n = 1 if doing no bootstraps, this writes out an input file for number of bootstraps (bs_setup.dat)
+est = TRUE
+io = TRUE
+
+#Loop over years and run sam:
+for (y in 1991:1994) {
+ctl_file = paste0("sam",y,".dat")
+if (est) {
+  if (io)
+    system(paste0("sam -nox -io -ind  ",ctl_file))
+  else
+    system(paste0("sam -ind  ",ctl_file))
 }
-#----------------------------------------------------
-#Datatable summary of catch by year
-dd[FMP_Subarea=="BS",sum(Catch),.(Year)]
+}
 
-names(cd)
-cdf <- dd %>% filter(Year==2019,FMP_Area=="BSAI",FMP_Subarea=="BS",Species_Group=="Pollock") %>% transmute(
-    area=NMFS_Area,month=as.integer(WED/100), strata=ifelse(month<6,1,ifelse(area>519,2,3)), catch=Catch )  %>% 
-    select(strata, catch) %>% group_by(strata) %>% summarise(catch=sum(catch))
-tbl_df(cdf)
-cdf$catch/sum(cdf$catch )
-#####END of Catch compilation#############################################################
 
-#--------------------------
-# Fishery data pull and write files for sampler
-#--------------------------
-SetBS(n=1000)
-SetBS(n=1)
-for (i in 1991:2020) Sampler_NRS(yr=i)
-  # missing 1996-1998...
-for (i in 1998:2020) Sampler_NRS(yr=i)
+for (y in 1998:2022) {
+  ctl_file = paste0("sam",y,".dat")
+  if (est) {
+    if (io)
+      system(paste0("sam -nox -io -ind  ",ctl_file))
+    else
+      system(paste0("sam -ind  ",ctl_file))
+  }
+}
+
+
+
+#See if next section gives you the datafiles you need but a bunch of stuff below that seems unnecessary
 #--------------------------
 ctmp<-wtmp<-NULL
 for (i in c(1991:1994,1998:2020)) {
@@ -74,6 +62,8 @@ tscat <- pivot_wider(cdf,names_from=c(sex,age),values_from=catch)
 tscat
 write_csv(tscat,"catagesex.csv")
 
+
+
 ggplot(cdf,aes(x=age,y=catch,fill=sex,color=sex)) + 
 geom_bar(position="dodge2", stat='identity') + theme_few()+ facet_wrap(.~year)
 
@@ -87,11 +77,21 @@ ggplot(wdf,aes(x=age,y=weight,fill=sex,color=sex)) +
 geom_line(size=2, stat='identity') + theme_few()+ facet_wrap(.~year)
 
 
+
+
+
+
+
+
+
+
+
+
 #--------------------------
 # Read in wt-age bootstraps
 #--------------------------
   # Stratified
-library(ggthemes)
+
 wsdt <- (read.table("results/wtagesex.dat",header=F))
 names(wsdt) <- c("bs","hdr","yr","strata",1:15)
 head(wsdt)

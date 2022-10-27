@@ -17,8 +17,8 @@ source(file.path(GitDir,"QueryLengthsForSampler.R"), echo=TRUE)
 source(file.path(GitDir,"QueryCatchByStrata.R"), echo=TRUE)
 
 #Connect to the database
-AFSC <- odbcConnect("AFSC","mcgilliardc","oopstriangle13$") #mcgilliardc
-AKFIN<-odbcConnect("AKFIN","cmcgilliard","oopscircle12$") #cmcgilliard
+AFSC <- odbcConnect("AFSC","","") #mcgilliardc
+AKFIN<-odbcConnect("AKFIN","","") #cmcgilliard
 FmpArea <- "500 and 544" 
 SpeciesCode<-"(104,120)" #and also 120
 

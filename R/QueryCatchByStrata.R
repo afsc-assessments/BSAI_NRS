@@ -62,8 +62,8 @@ for (y in 1:length(years)) {
   
   mystuff<-paste(
    years[y],"\n",
-   "Data/age",years[y],".dat","\n",
-   "Data/len",years[y],".dat","\n",
+   "age",years[y],".dat","\n",
+   "len",years[y],".dat","\n",
    nage[y],"\n",
    nlen[y],"\n",
    minage,"\n",
