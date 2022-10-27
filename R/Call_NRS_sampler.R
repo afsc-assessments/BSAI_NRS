@@ -81,8 +81,9 @@ WideComp
 write_csv(WideComp,"results/catagesex.csv")
 
 #Plot the aggregated catch-at-age data
-ggplot(cdfp,aes(x=age,y=catch,fill=sex,color=sex)) + 
+g<-ggplot(cdfp,aes(x=age,y=catch,fill=sex,color=sex)) + 
 geom_bar(position="dodge2", stat='identity') + theme_few()+ facet_wrap(.~year)
+ggsave(filename = "results/catageplot.png",plot = g,device = "png")
 
 #Aggregate catch-at-age data over bootstraps and format for fm.tpl data inputs  
 #Look for results/catagesex.csv
@@ -105,9 +106,10 @@ write_csv(WideWts,"results/wtagesex.csv")
 # tswt <- pivot_wider(wdf,names_from=c(sex,age),values_from=weight)
 # write_csv(tswt,"results/wtagesex.csv")
 
-ggplot(wdfp,aes(x=age,y=weight,fill=sex,color=sex)) + 
+w<-ggplot(wdfp,aes(x=age,y=weight,fill=sex,color=sex)) + 
 geom_line(size=2, stat='identity') + theme_few()+ facet_wrap(.~year)
 
+ggsave(filename = "results/wtageplot.png",plot = w,device = "png")
 
 
 
