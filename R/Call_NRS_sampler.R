@@ -68,6 +68,10 @@ cdfp<-cdf #for plotting below
 cdf<-cdf %>% mutate(age = replace(age, sex=="M",100+as.numeric(age)))
 cdf<-cdf %>% group_by(year,age) %>% select(year,age,catch)
 
+tot<-cdf %>% group_by(year) %>% summarise(tcatch=sum(catch))
+cdf<-full_join(cdf,tot)  %>% mutate(catch = catch/tcatch)
+cdf<-cdf %>% select(year,age,catch)
+
 
 thegrid<-expand.grid(age=c(seq(from =minage,to=maxage,by=1),seq(from = 100+minage,to=100+maxage,by=1)),year = unique(cdf$year))
 ExpandComp<-full_join(cdf,thegrid) 
@@ -95,7 +99,7 @@ ExpandWts<-ExpandWts %>% replace_na(list(weight=0))
 WideWts<-ExpandWts %>% group_by(year,age) %>% select(year,age,weight) %>% spread(age,weight)
 WideWts
 
-write_csv(WideWtsF,"results/wtagesex.csv")
+write_csv(WideWts,"results/wtagesex.csv")
 
 
 # tswt <- pivot_wider(wdf,names_from=c(sex,age),values_from=weight)
