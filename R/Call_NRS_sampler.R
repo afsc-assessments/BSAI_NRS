@@ -40,9 +40,10 @@ for (y in 1998:2022) {
   }
 }
 
+# Sampler done running
+##################
 
-
-#See if next section gives you the datafiles you need but a bunch of stuff below that seems unnecessary
+#Read in datafiles from separate years and aggregate the info
 #--------------------------
 ctmp<-wtmp<-NULL
 for (i in c(1991:1994,1998:2022)) {
@@ -55,25 +56,51 @@ wtage <- wtmp
 catage <- ctmp
 
 ##################
-# Way to write out for flatfish model...
+
+
+#Aggregate catch-at-age data over bootstraps and format for fm.tpl data inputs  
+#Look for results/catagesex.csv
 cdf <- pivot_longer(catage,5:(maxage+4),names_to="age",values_to="catch") %>%
        mutate(sex=ifelse(sex==1,"F","M")) %>% filter(catch>0)
 cdf <- cdf %>% group_by(year,sex,age) %>% summarise(catch=mean(catch)) %>% mutate(sex=as.factor(sex),age=as.numeric(age)) 
-tscat <- pivot_wider(cdf,names_from=c(sex,age),values_from=catch)
-tscat
-write_csv(tscat,"results/catagesex.csv")
+cdfp<-cdf #for plotting below
+
+cdf<-cdf %>% mutate(age = replace(age, sex=="M",100+as.numeric(age)))
+cdf<-cdf %>% group_by(year,age) %>% select(year,age,catch)
 
 
+thegrid<-expand.grid(age=c(seq(from =minage,to=maxage,by=1),seq(from = 100+minage,to=100+maxage,by=1)),year = unique(cdf$year))
+ExpandComp<-full_join(cdf,thegrid) 
+ExpandComp<-ExpandComp %>% replace_na(list(catch=0))
+WideComp<-ExpandComp %>% group_by(year,age) %>% select(year,age,catch) %>% spread(age,catch)
+WideComp
+write_csv(WideComp,"results/catagesex.csv")
 
-ggplot(cdf,aes(x=age,y=catch,fill=sex,color=sex)) + 
+#Plot the aggregated catch-at-age data
+ggplot(cdfp,aes(x=age,y=catch,fill=sex,color=sex)) + 
 geom_bar(position="dodge2", stat='identity') + theme_few()+ facet_wrap(.~year)
 
+#Aggregate catch-at-age data over bootstraps and format for fm.tpl data inputs  
+#Look for results/catagesex.csv
 wdf <- pivot_longer(wtage,5:(maxage+4),names_to="age",values_to="weight") %>% 
        mutate(sex=ifelse(sex==1,"F","M")) %>% filter(weight>0)
 wdf <- wdf %>% group_by(year,sex,age) %>% summarise(weight=mean(weight)) %>% mutate(sex=as.factor(sex),age=as.numeric(age)) 
 wdf
-tswt <- pivot_wider(wdf,names_from=c(sex,age),values_from=weight)
-write_csv(tswt,"results/wtagesex.csv")
+
+thegrid<-expand.grid(sex = c("F","M"),age=c(seq(from =minage,to=maxage,by=1)),year = unique(cdf$year))
+ExpandWts<-full_join(wdf,thegrid) 
+ExpandWts<-ExpandWts %>% replace_na(list(weight=0))
+WideWtsF<-ExpandWts %>% group_by(sex,year,age) %>% filter(sex=="F") %>% select(year,age,weight) %>% spread(age,weight)
+WideWtsF
+WideWtsM<-ExpandWts %>% group_by(sex,year,age) %>% filter(sex=="M") %>% select(year,age,weight) %>% spread(age,weight)
+WideWtsM
+
+
+write_csv(WideWtsF,"results/wtageF.csv")
+write_csv(WideWtsM,"results/wtageM.csv")
+
+# tswt <- pivot_wider(wdf,names_from=c(sex,age),values_from=weight)
+# write_csv(tswt,"results/wtagesex.csv")
 
 ggplot(wdf,aes(x=age,y=weight,fill=sex,color=sex)) + 
 geom_line(size=2, stat='identity') + theme_few()+ facet_wrap(.~year)
