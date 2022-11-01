@@ -1,0 +1,108 @@
+run_name
+Std
+Tier
+3
+nalts
+7
+alt_list
+ 1 2 3 4 5 6 7
+TAC_ABC
+1
+SrType
+1
+Rec_Gen
+1
+Fmsy_F35
+0
+Rec_Cond
+0
+Write_Big
+1
+npro
+14
+nsims
+1000
+styr
+2022
+bzero_in
+0
+phizero_in
+6.95239e-310
+alpha_in
+0
+sigmar_in
+0
+rho_in
+0
+nyrs_catch_in
+2
+nspp
+1
+OY_min
+1
+OY_max
+1943.25
+spp_file_name
+../fm.prj
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ABC_Multiplier
+ 1
+N_scalar
+ 1
+Alt4_SPR
+ 0.6
+ntacspp
+1
+tac_ind
+ 1
+Obs_Catch
+ 2022 16.0143
+ 2023 40.76
+maxabc
+ 2.60197
+theta
+ 0.417
+ 0.372
+ 0.361
+ 0.296
+ 0.2733
+ 0.125
+ -0.300856
+SSL_spp(i)
+0
+Const_Buffer(i)
+0
+ngear(i)
+1
+nsexes(i)
+2
+avg_5yrF(i)
+0.0681589
+FABC_Adj(i)
+1
+SPR_abc(i)
+0.4
+SPR_ofl(i)
+0.35
+spawnmo(i)
+2
+nages(i)
+20
