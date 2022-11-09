@@ -22,13 +22,13 @@
         }
         df <- data.frame(Model   = names(M)[i],
                          par     = A$fit$names,
-                         log_rec = A$fit$est,
-                         log_sd  = A$fit$std)
-        df <- subset(df, par == "rec_dev")
+                         pred_rec = A$fit$est,
+                         sd  = A$fit$std)
+        df <- subset(df, par == "pred_rec")
         df$year    <- A$Yr
         #df$log_rec <- exp(df$log_rec)
-        df$lb      <- exp(df$log_rec - 1.96*df$log_sd)
-        df$ub      <- exp(df$log_rec + 1.96*df$log_sd)
+        df$lb      <- df$pred_rec - 1.96*df$sd
+        df$ub      <- df$pred_rec + 1.96*df$sd
         mdf <- rbind(mdf, df)
     }
     return(mdf)
@@ -74,20 +74,20 @@
 #' @author SJD Martell, DN Webber
 #' @export
 #' 
-plot_recruitment <- function(M, xlab = "Year", ylab = "Recruitment (thousands of individuals)")
+plot_recruitment <- function(M, xlab = "Year", ylab = "Recruitment in numbers")
 {
     xlab <- paste0(xlab, "\n")
     ylab <- paste0(ylab, "\n")
     mdf <- .get_recruitment_df(M)
     if (length(M) == 1)
     {
-        p <- ggplot(mdf, aes(x = year, y = exp(log_rec))) +
+        p <- ggplot(mdf, aes(x = year, y = pred_rec)) +
             geom_bar(stat = "identity", alpha = 0.4, position = "dodge") +
-            geom_pointrange(aes(year, exp(log_rec), ymax = ub, ymin = lb), position = position_dodge(width = 0.9))
+            geom_pointrange(aes(year, pred_rec, ymax = ub, ymin = lb), position = position_dodge(width = 0.9))
     } else {
-        p <- ggplot(mdf, aes(x = year, y = exp(log_rec), col = Model, group = Model)) +
+        p <- ggplot(mdf, aes(x = year, y = pred_rec, col = Model, group = Model)) +
             geom_bar(stat = "identity", alpha = 0.4, aes(fill = Model), position = "dodge") +
-            geom_pointrange(aes(year, exp(log_rec), col = Model, ymax = ub, ymin = lb), position = position_dodge(width = 0.9))
+            geom_pointrange(aes(year, pred_rec, col = Model, ymax = ub, ymin = lb), position = position_dodge(width = 0.9))
     }
     p <- p + labs(x = xlab, y = ylab)
     if(!.OVERLAY) p <- p + facet_wrap(~Model)
