@@ -14,7 +14,7 @@ source(file.path(codedir,"read-admb.R"))
 .OVERLAY <-TRUE
 .THEME<- theme_few()
   
-master <-(file.path(mydir,"c1mod4_francis_estMQbigpriors_retro"))
+master <-(file.path(mydir,"c1mod4_francis_2022_retro"))
 
 assess_LY=2022					#assessment terminal year
 endyrvec <-1:10		    #retrospective peels (Subtracted from endyr in tpl)
