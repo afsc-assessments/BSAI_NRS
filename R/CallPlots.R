@@ -173,12 +173,28 @@ write.csv(TotBiom_Table,file.path(BaseDir,"tables","TimeSeriesTotBiom.csv"),quot
 #Note this is for all ages - ugh.
 
 
-likes.df<-data.frame(total = BaseRun$obj_fun,
+likes.df<-data.frame(model = "M18.3",
+                     total = BaseRun$obj_fun,
                      survey = BaseRun$survey_likelihood,
                      fshry_age = BaseRun$age_likelihood_for_fishery,
                      surv_age =  BaseRun$age_likeihood_for_survey)
 write.csv(t(likes.df),file.path(BaseDir,"tables","Likelihoods.csv"),quote = FALSE,row.names = FALSE)
 
+likesM.df<-data.frame(model = "M22.2",
+                     total = MBigM2022$obj_fun,
+                     survey = MBigM2022$survey_likelihood,
+                     fshry_age = MBigM2022$age_likelihood_for_fishery,
+                     surv_age =  MBigM2022$age_likeihood_for_survey)
+
+likesF.df<-data.frame(model = "M22.1",
+                      total = MF2022$obj_fun,
+                      survey = MF2022$survey_likelihood,
+                      fshry_age = MF2022$age_likelihood_for_fishery,
+                      surv_age =  MF2022$age_likeihood_for_survey)
+
+Alikes.df<-rbind(likes.df,likesF.df,likesM.df)
+
+write.csv(t(Alikes.df),file.path("tables","Likelihoods.csv"),quote = FALSE,row.names = FALSE)
 
 
 
