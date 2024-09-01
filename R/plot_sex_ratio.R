@@ -21,7 +21,7 @@
         df$Model <- names(M)[i]
         mdf      <- rbind(mdf, df)
     }
-    names(mdf) <- c("Year","Ratio","source")
+    names(mdf) <- c("Year","Ratio","source","Model")
     mdf$Year   <- as.numeric(mdf$Year)
     return(mdf)
 }
@@ -135,22 +135,22 @@ plot_sex_ratio <- function(M, xlab = "Year", ylab = "Proportion female ", ylim =
   if (type=="Survey") 
   {
   	tmp <- A %>% filter(source=="Survey_obs") 
-    p   <- p + geom_point(data=tmp, aes(x = Year, y = Females),size=3)  
+    p   <- p + geom_point(data=tmp, aes(x = Year, y = Ratio),size=3)  
 
   	tmp <- A %>% filter(source=="Survey_pred") 
-    p   <- p + geom_path(data=tmp, aes(x = Year, y = Females,color=Model),size=1.2) 
+    p   <- p + geom_path(data=tmp, aes(x = Year, y = Ratio,color=Model),size=1.2) 
   }
   if (type==c("Fishery"))
   {
   	tmp <- A %>% filter(source=="Fishery_obs") 
-    p   <- p + geom_point(data=tmp, aes(x = Year, y = Females),size=3) 
+    p   <- p + geom_point(data=tmp, aes(x = Year, y = Ratio),size=3) 
 
     tmp <- A %>% filter(source=="Fishery_pred") 
-    p   <- p + geom_path(data=tmp, aes(x = Year, y = Females,color=Model),size=1.2,position="identity") 
+    p   <- p + geom_path(data=tmp, aes(x = Year, y = Ratio,color=Model),size=1.2,position="identity") 
   } 
   if (type=="Population")
   {
-    p <- p + geom_path(aes(x = Year, y = Females,color=Model), size=1.2,position="identity" ) 
+    p <- p + geom_path(aes(x = Year, y = Ratio,color=Model), size=1.2,position="identity" ) 
   }
 
   print(p + .THEME + ggtitle(type))

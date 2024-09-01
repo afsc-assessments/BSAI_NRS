@@ -1,4 +1,6 @@
-plot_fsh_sel <- function(mod, title=NULL,alpha=0.3,styr=1991,endyr=2020,bysex=TRUE,sexoverlay=TRUE){
+library(forcats)
+
+plot_fsh_sel <- function(mod, title=NULL,alpha=0.3,styr,endyr,bysex=TRUE,sexoverlay=TRUE,legend_position = "bottom"){
 #mod=M[[1]]; title="stuff";alpha=0.3;styr=1991;endyr=2020;bysex=TRUE;sexoverlay=TRUE
 names(mod)
   mdf <- data.frame(Year=mod$Yr,sex="males",mod$sel_fsh_m)
@@ -9,10 +11,10 @@ if (bysex)
 {
 if (sexoverlay){
   ggplot(sdf,aes(x=age,y=fct_rev(as.factor(Year)),height = selectivity,fill=sex,color=sex,alpha=alpha)) + ggtitle(title) +
-            geom_density_ridges(stat = "identity",scale=1,alpha = alpha) + ylab("Year")+ .THEME #+ facet_grid(~seas) +
+            geom_density_ridges(stat = "identity",scale=1,alpha = alpha) + ylab("Year")+ .THEME + theme(legend.position=legend_position)#+ facet_grid(~seas) + 
  } else {
   ggplot(sdf,aes(x=age,y=fct_rev(as.factor(Year)),height = selectivity,fill=sex,color=sex,alpha=alpha)) + ggtitle(title) +
-            geom_density_ridges(stat = "identity",scale=1,alpha = alpha) + ylab("Year")+ .THEME #+ facet_grid(~seas) +
+            geom_density_ridges(stat = "identity",scale=1,alpha = alpha) + ylab("Year")+ .THEME + theme(legend.position = legend_position) #+ facet_grid(~seas) +
 }
 #else {
   #ggplot(sdf,aes(x=age,y=fct_rev(as.factor(Year)),height = selectivity,fill=sex,color=sex,alpha=alpha)) + ggtitle(title) +

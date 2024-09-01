@@ -1,0 +1,35 @@
+---
+title: "README"
+author: "Carey McGilliard"
+date: "8/23/2024"
+output: github_document
+---
+```{r setup, include = FALSE}
+```
+
+# Bering Sea and Aleutian Islands (BSAI) Northern rock sole stock assessment
+This repository houses relevant code and files corresponding to the BSAI Northern rock sole stock assessment. A release of the latest version of the files is planned for December of each year moving forward.
+
+## 2022 model runs
+The accepted stock assessment model is in the folder 2022/model_runs/c1mod4_2022
+
+The ABC was based on the OFL from the model run 2022/model_runs/c1mod4_francis_2022
+
+A third model run that was included in the 2022 SAFE is 2022/model_runs/c1mod4_francis_estMQbigpriors
+
+All three models are described in the 2022 SAFE: https://www.fisheries.noaa.gov/resource/data/2022-assessment-northern-rock-sole-stock-bering-sea-and-aleutian-islands
+
+# Acronymns
+
+NOAA: National Oceanic and Atmospheric Administration     
+NMFS: National Marine Fisheries Service     
+AFSC: Alaska Fisheries Science Center     
+REFM: Resource and Ecology and Fisheries Management  
+BSAI: Bering Sea and Aleutian Islands
+NRS: Northern rock sole
+
+# Legal disclaimer
+This repository is a software product and is not official communication of the National Oceanic and Atmospheric Administration (NOAA), or the United States Department of Commerce (DOC). All NOAA GitHub project code is provided on an ‘as is’ basis and the user assumes responsibility for its use. Any claims against the DOC or DOC bureaus stemming from the use of this GitHub project will be governed by all applicable Federal law. Any reference to specific commercial products, processes, or services by service mark, trademark, manufacturer, or otherwise, does not constitute or imply their endorsement, recommendation, or favoring by the DOC. The DOC seal and logo, or the seal and logo of a DOC bureau, shall not be used in any manner to imply endorsement of any commercial product or activity by the DOC or the United States Government.
+
+
+

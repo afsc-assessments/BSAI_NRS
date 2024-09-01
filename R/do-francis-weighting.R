@@ -4,7 +4,7 @@
 
 #Model-based age composition data were weighted using the methodology of Francis (2011). Specifically stage 2 weighting incorporated stage 1 legacy weights (200) using Equation TA1.8 of Francis (2011).
 #example
-#srvwts<-francis(repfile=M2022,minage=1,maxage=20,nsexes=2,datatype = "srv")
+#srvwts<-francis(repfile=M2022,nsamp = rep(200,length = 41),minage=1,maxage=20,nsexes=2,datatype = "srv")
 #fshwts<-francis(repfile=M2022,minage=1,maxage=20,nsexes=2,datatype = "fsh")
 
 francis<-function(repfile=M2022,minage=1,maxage=20,nsexes=2,datatype = "srv") {

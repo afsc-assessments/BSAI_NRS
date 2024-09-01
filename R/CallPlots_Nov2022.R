@@ -19,7 +19,10 @@ library(tidyr)
 library(ggridges)
 library(patchwork)
 
+#2022
 rundir<-"C:/Users/carey.mcgilliard/Work/FlatfishAssessments/2022/NRS/Runs/"
+
+
 codedir<-"C:/GitProjects/BSAI_NRS/R"
 .OVERLAY <-TRUE
 .THEME<- theme_few()
@@ -43,12 +46,17 @@ source("C:/GitProjects/BSAI_NRS/R/plot_sex_ratio.R", echo=TRUE)
 setwd(rundir)
 
 #Runs to compare
-M2020<-read_admb("c1mod4_2020_final_run/fm")
 M2022<-read_admb("c1mod4_alldata_2022/fm")
-MF2022<-read_admb("c1mod4_francis_2022/fm")
-#M2020<-read_admb("c1mod4_2020_final_run/fm")
-#MM2022<-read_admb("c1mod4_francis_estM/fm")
-MBigM2022<-read_admb("c1mod4_francis_estMQbigpriors/fm")
+M2022_sept2024<-read_admb("c1mod4_alldata_2022_sept2024/fm")
+
+
+# M2020<-read_admb("c1mod4_2020_final_run/fm")
+# M2022<-read_admb("c1mod4_alldata_2022/fm")
+# MF2022<-read_admb("c1mod4_francis_2022/fm")
+# #M2020<-read_admb("c1mod4_2020_final_run/fm")
+# #MM2022<-read_admb("c1mod4_francis_estM/fm")
+# MBigM2022<-read_admb("c1mod4_francis_estMQbigpriors/fm")
+
 mylist<-list()
 mylist$M18.3<-M2022
 #mylist$M2020<-M2020

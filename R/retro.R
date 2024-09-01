@@ -6,7 +6,8 @@ library(ggthemes)
 library(viridis)
 
 # Set your local directory--------
-	mydir <- "C:/Users/carey.mcgilliard/Work/FlatfishAssessments/2022/NRS/Runs"  #change to mine.
+#	mydir <- "C:/Users/carey.mcgilliard/Work/FlatfishAssessments/2022/NRS/Runs"  #change to mine.
+  mydir <- "C:/Users/carey.mcgilliard/Work/FlatfishAssessments/2024/bsai_nrs/runs"
   codedir<-"C:/GitProjects/BSAI_NRS/R"
 # Get tools to read-write control file
 #	set up a file in mydir called "retro" and put a folder in there called "orig" with the basics of your favorit model, mod.ctl, fm.dat, makefile,...
@@ -14,9 +15,9 @@ source(file.path(codedir,"read-admb.R"))
 .OVERLAY <-TRUE
 .THEME<- theme_few()
   
-master <-(file.path(mydir,"c1mod4_francis_estMQbigpriors_retro"))
+master <-(file.path(mydir,"c3mod4_francis_ISS_sept2024_retro"))
 
-assess_LY=2022					#assessment terminal year
+assess_LY=2024					#assessment terminal year
 endyrvec <-1:10		    #retrospective peels (Subtracted from endyr in tpl)
 
 # Values used to downweight survey data when invoked written to retro.dat
@@ -27,7 +28,7 @@ comp_n=.001	#input sample size  for length and age composition data used to down
 
 do_run <- TRUE  #very important to make the runs go!
 df_res <- NULL
-filestocopy=c("fm.exe","fm.dat","mod.ctl","c1.dat","fut_temp.dat","future_catch.dat")
+filestocopy=c("fm.exe","fm.dat","mod.ctl","c3.dat","fut_temp.dat","future_catch.dat")
 
 for(i in 0:length(endyrvec)){
 	# Start in "retro" directory (runs/retro)
