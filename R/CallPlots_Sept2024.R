@@ -54,6 +54,11 @@ mydirs$M22.1<-"c2mod4_francis_2022_sept2024"
 mydirs$M24.1<-"c3mod4_francis_ISS_sept2024"
 mydirs$M24.2<-"c3mod5_ISS_francis_mq_sept2024"
 
+sens_dirs<-list()
+sens_dirs$M24.2<-"c3mod5_ISS_francis_mq_sept2024"
+sens_dirs$M24.2b<-"c3mod5_toms_ages"
+sens_dirs$M24.2c<-"c3mod5_LOO_fsh_ages"
+
 #Runs to compare
 m_2022<-read_admb("c1mod4_alldata_2022/fm")
 m_sept2024<-read_admb("c1mod4_alldata_2022_sept2024/fm")
@@ -157,6 +162,7 @@ agg_comps_plot<-plot_agg_comps(the_runs=mylist,max_age=max_age)
 ggsave(file.path("plots","aggregate_comps.png"),plot = agg_comps_plot,width = 11,height = 6,units = "in",device = "png")
 
 ii<-list()
+iii<-list()
 
 for (i in 1:length(mylist)) {
   onelist<-list()
@@ -174,12 +180,22 @@ for (i in 1:length(mylist)) {
 
   ii[[i]]<-plot_fsh_sel(mod=mylist[[i]], title=names(mylist[i]),alpha=0.3,styr=1991,endyr=endyr,bysex=TRUE,sexoverlay=TRUE,legend_position = "bottom")
   ggsave(filename = file.path(mydirs[[i]],"plots","fsh_sel.png"),plot = ii[[i]],device = "png",height = 11,width = 6)
+
+  iii[[i]]<-plot_fsh_sel(mod=mylist[[i]], title=names(mylist[i]),alpha=0.3,styr=1975,endyr=1990,bysex=TRUE,sexoverlay=TRUE,legend_position = "bottom")
+  ggsave(filename = file.path(mydirs[[i]],"plots","fsh_sel.png"),plot = ii[[i]],device = "png",height = 11,width = 6)
   
+
 }
 
 #for this plot might need to re-run ii above with legend_position = "none"
 all_fish_sel_plot<-ii[[2]] + ii[[4]] +ii[[5]]
 ggsave(filename = file.path("plots","fsh_sel.png"),plot = all_fish_sel_plot,device = "png",height = 8.5,width = 11)
+
+#early fishery selectivity
+early_fish_sel_plot<-iii[[2]] + iii[[4]] + iii[[5]]
+ggsave(filename = file.path("plots","early_fsh_sel.png"),plot = early_fish_sel_plot,device = "png",height = 8.5,width = 11)
+
+
 
 # Calculate Francis Weights - spits out new vectors for input sample size (apply manually)
 srvwts<-francis(repfile=MF2022,minage=1,maxage=20,nsexes=2,datatype = "srv")
@@ -216,20 +232,50 @@ for (i in 3:length(mylist)) {
 
 main_ps<-std_t %>% filter(name == "q_srv" | name == "natmort_m" | name== "natmort_f" |
                           name == "mean_log_rec" | name == "mean_log_init" | name == "log_avg_fmort" |
-                          name == "R_logalpha" | name == "R_logbeta")
+                          name == "R_logalpha" | name == "R_logbeta" | name== "logFmsyr" | name == "Bmsy" ) %>%
+                   select(-c(index)) %>% 
+                   pivot_wider(names_from = model,values_from = c(value, std.dev))
 
+write.csv(main_ps,file.path("tables","main_parameters.csv"))
 
-
-derived_ps<-std_t %>% filter(name == "log_msy_sel_f" | name == "log_msy_sel_m" | name == "msy" |
-                             name == "Fmsy" | name == "logFmsy" | name =="Fmsyr" | name== "logFmsyr" |
-                             name == "Bmsy" | name == "Bmsyr")
-                         
+#These can be written out, but it's logFmsyr and Bmsy that are used in management calculations and reporting.
+# derived_ps<-std_t %>% filter( name == "msy" |
+#                              name == "Fmsy" | name == "logFmsy" | name =="Fmsyr" | name== "logFmsyr" |
+#                              name == "Bmsy" | name == "Bmsyr") %>%
+#                       select(-c(index)) %>%
+#                       pivot_wider(names_from = model,values_from = c(value, std.dev))
+#
+#write.csv(derived_ps,file.path("tables","derived_parameters.csv"))
 
 sel_ps<-std_t %>% filter( name == "sel_slope_fsh_f" | name == "sel50_fsh_f" | name == "sel_slope_fsh_m" |
                             name == "male_sel_offset" | name == "sel_slope_srv" | name=="sel50_srv" |
-                            name == "sel_slope_srv" | name == "sel_slope_srv_m")
+                            name == "sel_slope_srv" | name == "sel_slope_srv_m") %>%
+                  select(-c(index)) %>%
+                  pivot_wider(names_from = model,values_from = c(value, std.dev))
+write.csv(sel_ps,file.path("tables","selex_parameters.csv"))
+
+#selectivity curve used for projections in logspace
+ages<-seq(from = 1, to = maxage, by = 1)
+long_ages<-rep(ages, 2*length(mylist))
+projection_sel_t <-std_t %>% filter(name == "log_msy_sel_f" | name == "log_msy_sel_m") %>%
+  select(-c(index))
+
+projection_sel_t$age<-long_ages
+#plot the fishery selex used for projections
+projection_sel_t<-projection_sel_t %>% mutate(selex = exp(value))
+
+# p_proj_sel<-ggplot() %>%
+#             geom_line(data = projection_sel_t,aes(x = age,y = selex,color = model)) +
+#             facet_wrap(~)
 
 
+projection_sel_wide<-projection_sel_t %>%
+  pivot_wider(names_from = model,values_from = c(value, std.dev))
+
+
+
+
+write.csv(projection_sel_wide,file.path("tables","projection_selex_parameters.csv"))
 
 
   
@@ -244,7 +290,6 @@ write.csv(mylist[[i]]$natage_m,file.path(mydirs[[i]],"tables","NumbersAtAgeM.csv
 CurrSSB<-as.data.frame(mylist[[i]]$SSB) %>% rename(Year = V1,SSB_Curr = V2, SSB_SD_Curr = V3,SSB_LB_Curr = V4, SSB_UB_Curr= V5)
 PrevSSB<-as.data.frame(tslist$Previous$SSB) %>% rename(Year = V1,SSB_Prev = V2, SSB_SD_Prev = V3,SSB_LB_Prev = V4, SSB_UB_Prev= V5)
 
-
 SSB_Table<-full_join(PrevSSB,CurrSSB) %>% select(Year,SSB_Prev,SSB_SD_Prev,SSB_Curr,SSB_SD_Curr)
 write.csv(SSB_Table,file.path(mydirs[[i]],"tables","TimeSeriesSSB.csv"),quote = FALSE,row.names = FALSE)
 #Note: still need to add projections from Exec summary table. Do it manually; make sure they match
@@ -252,9 +297,16 @@ write.csv(SSB_Table,file.path(mydirs[[i]],"tables","TimeSeriesSSB.csv"),quote = 
 CurrTotBiom<-as.data.frame(mylist[[i]]$TotBiom) %>% rename(Year = V1,TotBiom_Curr = V2, TotBiom_SD_Curr = V3,TotBiom_LB_Curr = V4, TotBiom_UB_Curr= V5)
 PrevTotBiom<-as.data.frame(tslist$Previous$TotBiom) %>% rename(Year = V1,TotBiom_Prev = V2, TotBiom_SD_Prev = V3,TotBiom_LB_Prev = V4, TotBiom_UB_Prev= V5)
 
+#Note this is for all ages - ugh.
 TotBiom_Table<-full_join(PrevTotBiom,CurrTotBiom) %>% select(Year,TotBiom_Prev,TotBiom_SD_Prev,TotBiom_Curr,TotBiom_SD_Curr)
 write.csv(TotBiom_Table,file.path(mydirs[[i]],"tables","TimeSeriesTotBiom.csv"),quote = FALSE,row.names = FALSE)
-#Note this is for all ages - ugh.
+
+CurrRec<-as.data.frame(mylist[[i]]$R) %>% rename(Year = V1,Rec_Curr = V2, Rec_SD_Curr = V3,Rec_LB_Curr = V4, Rec_UB_Curr= V5)
+PrevRec<-as.data.frame(tslist$Previous$R) %>% rename(Year = V1,Rec_Prev = V2, Rec_SD_Prev = V3,Rec_LB_Prev = V4, Rec_UB_Prev= V5)
+
+Rec_Table<-full_join(PrevRec,CurrRec) %>% select(Year,Rec_Prev,Rec_SD_Prev,Rec_Curr,Rec_SD_Curr)
+write.csv(Rec_Table,file.path(mydirs[[i]],"tables","TimeSeriesRecruits.csv"),quote = FALSE,row.names = FALSE)
+
 }
 
 #Likelihoods
@@ -275,5 +327,52 @@ for (i in 3:length(mylist)) {
 
 write.csv(t(Alikes.df),file.path("tables","Likelihoods.csv"),quote = FALSE,row.names = FALSE)
 
+#OSA residuals
+library(TMB)
+
+#TMB:::install.contrib("https://github.com/vtrijoulet/OSA_multivariate_dists/archive/main.zip")
+#remotes::install_github("fishfollower/compResidual/compResidual", INSTALL_opts=c("--no-multiarch"), force=TRUE)
+
+library(compResidual)
+
+nsamp_vec<-t(mylist[[5]]$nsmpl_srv_s)
+
+
+
+obs_f<-mylist[[5]]$oac_srv_s[,1:20]
+obs_m<-mylist[[5]]$oac_srv_s[,21:40]
+eac_f<-mylist[[5]]$eac_srv_s[,1:20]
+eac_m<-mylist[[5]]$eac_srv_s[,21:40]
+
+new_obs_f<-matrix(nrow = nrow(obs_f),ncol = ncol(obs_f))
+for (i in 1:length(nsamp_vec)) {
+ new_obs_f[i,]<- nsamp_vec[i]*obs_f[i,]
+ new_obs_m[i,]<-nsamp_vec[i]*obs_m[i,]
+ new_eac_f[i,]<-nsamp_vec[i]*eac_f[i,]
+ new_eac_m[i,]<-nsamp_vec[i]*eac_m[i,]
+}
+
+res_f<-resMulti(t(obs_f),t(eac_f))
+
+#Fishery osa residuals
+nsamp_vec<-t(mylist[[5]]$nsmpl_fsh_s)
+
+obs_f<-mylist[[5]]$oac_fsh_s[,1:20]
+obs_m<-mylist[[5]]$oac_fsh_s[,21:40]
+eac_f<-mylist[[5]]$eac_fsh_s[,1:20]
+eac_m<-mylist[[5]]$eac_fsh_s[,21:40]
+
+new_obs_f<-matrix(nrow = nrow(obs_f),ncol = ncol(obs_f))
+new_obs_m<-matrix(nrow = nrow(obs_m),ncol = ncol(obs_m))
+new_eac_f<-matrix(nrow = nrow(eac_f),ncol = ncol(eac_f))
+new_eac_m<-matrix(nrow = nrow(eac_m),ncol = ncol(eac_m))
+for (i in 1:length(nsamp_vec)) {
+  new_obs_f[i,]<- round(nsamp_vec[i]*obs_f[i,])
+  new_obs_m[i,]<-round(nsamp_vec[i]*obs_m[i,])
+  new_eac_f[i,]<-round(nsamp_vec[i]*eac_f[i,])
+  new_eac_m[i,]<-round(nsamp_vec[i]*eac_m[i,])
+}
+
+res_f<-resMulti(new_obs_f,new_eac_f)
 
 
