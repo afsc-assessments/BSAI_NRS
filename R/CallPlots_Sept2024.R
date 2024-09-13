@@ -18,6 +18,7 @@ library(dplyr)
 library(tidyr)
 library(ggridges)
 library(patchwork)
+library(compResidual)
 
 #2022
 #rundir<-"C:/Users/carey.mcgilliard/Work/FlatfishAssessments/2022/NRS/Runs/"
@@ -27,9 +28,12 @@ rundir<-"C:/Users/carey.mcgilliard/Work/FlatfishAssessments/2024/bsai_nrs/runs/"
 
 codedir<-"C:/GitProjects/BSAI_NRS/R"
 .OVERLAY <-TRUE
-.THEME<- theme_few()
+.THEME<- theme_few() + theme(text=element_text(size=20))
 maxage = 20
 endyr = 2024
+
+plot_purpose<-"plot_presentation"
+#plot_purpose<-"plots"
 
 #source(file.path(codedir,"prelims.R")) #libraries and ggthemes - may need some refining
 source(file.path(codedir,"read-admb.R"))
@@ -45,6 +49,8 @@ source(file.path(codedir,"do-francis-weighting.R"))
 source("C:/GitProjects/BSAI_NRS/R/plot-Fs.R", echo=TRUE)
 source("C:/GitProjects/BSAI_NRS/R/plot_sex_ratio.R", echo=TRUE)
 source("C:/GitProjects/BSAI_NRS/R/plot-aggregated-comps.R", echo=TRUE)
+source("C:/GitProjects/BSAI_NRS/R/plot_osa_comps.R", echo=TRUE)
+
 
 setwd(rundir)
 mydirs<-list()
@@ -93,8 +99,8 @@ if (!dir.exists(file.path(mydirs[[i]],"plots"))) {
   dir.create(file.path(mydirs[[i]],"plots"))
 }
 }
-if (!dir.exists("plots")) {
-  dir.create("plots")
+if (!dir.exists(plot_purpose)) {
+  dir.create(plot_purpose)
 }
 
 for (i in 1:length(mydirs)) {
@@ -118,24 +124,24 @@ fshwts<-francis(repfile=m_iss_francis_sept2024,minage=1,maxage=20,nsexes=2,datat
 
 #Make and save plots (comparison plots and base case plots)
 a<-plot_catch(modlst=mylist,themod=1,obspred = FALSE)
-ggsave(filename = "plots/catch.png",plot = a,device = "png",height = 7, width = 10,units = "in")
-ggsave(filename = file.path(BaseDir,"plots","catch.png"),plot = a,device = "png",height = 7, width = 10,units = "in")
+ggsave(filename = file.path(plot_purpose,"catch.png"),plot = a,device = "png",height = 5, width = 7,units = "in")
+ggsave(filename = file.path(BaseDir,plot_purpose,"catch.png"),plot = a,device = "png",height = 5, width = 7,units = "in")
 
 b<-plot_bts(M = mylist)
 bb<-plot_bts(M = BaseList)
-ggsave(filename = file.path("plots","bts_compare.png"),plot = b,device = "png",height = 10, width = 9,units = "in")
-ggsave(filename = file.path(BaseDir,"plots","bts.png"),plot = bb,device = "png",height = 10, width = 9,units = "in")
+ggsave(filename = file.path(plot_purpose,"bts_compare.png"),plot = b,device = "png",height = 10, width = 9,units = "in")
+ggsave(filename = file.path(BaseDir,plot_purpose,"bts.png"),plot = bb,device = "png",height = 10, width = 9,units = "in")
 
 
 c<-plot_rec(M=mylist)
 cc<-plot_rec(M=BaseList)
-ggsave(filename = file.path("plots","recruits_compare.png"),plot = c,device = "png",height = 6, width = 10,units = "in")
-ggsave(filename = file.path(BaseDir,"plots","recruits.png"),plot = cc,device = "png",height = 6, width = 10,units = "in")
+ggsave(filename = file.path(plot_purpose,"recruits_compare.png"),plot = c,device = "png",height = 6, width = 10,units = "in")
+ggsave(filename = file.path(BaseDir,plot_purpose,"recruits.png"),plot = cc,device = "png",height = 6, width = 10,units = "in")
 
 d<-plot_ssb(M = mylist)
 dd<-plot_ssb(M = BaseList)
-ggsave(filename = "plots/ssb_compare.png",plot = d,device = "png",height = 6, width = 10,units = "in")
-ggsave(filename = file.path(BaseDir,"plots","ssb.png"),plot = dd,device = "png",height = 6, width = 10,units = "in")
+ggsave(filename = file.path(plot_purpose,"ssb_compare.png"),plot = d,device = "png",height = 6, width = 10,units = "in")
+ggsave(filename = file.path(BaseDir,plot_purpose,"ssb.png"),plot = dd,device = "png",height = 6, width = 10,units = "in")
 
 
 e<-plot_srr(M=mylist, ylab = "Recruits (age 1, billions)", xlab = "Female spawning biomass (kt)", 
@@ -143,23 +149,23 @@ e<-plot_srr(M=mylist, ylab = "Recruits (age 1, billions)", xlab = "Female spawni
 ee<-plot_srr(M=BaseList, ylab = "Recruits (age 1, billions)", xlab = "Female spawning biomass (kt)", 
              ylim = NULL, xlim=NULL, alpha = 0.05,ebar="FALSE",leglabs=NULL,styr=1978,endyr=2016)
 
-ggsave(filename = file.path("plots","srr_compare.png"),plot = e,device = "png",height = 6, width = 10,units = "in")
-ggsave(filename = file.path(BaseDir,"plots","srr.png"),plot = ee,device = "png",height = 6, width = 10,units = "in")
+ggsave(filename = file.path(plot_purpose,"srr_compare.png"),plot = e,device = "png",height = 6, width = 10,units = "in")
+ggsave(filename = file.path(BaseDir,plot_purpose,"srr.png"),plot = ee,device = "png",height = 6, width = 10,units = "in")
 
 ff<-plot_srv_sel(theM=mylist,themod=1, title="Survey selectivity",bysex=TRUE,maxage = maxage)
-ggsave(filename = file.path(BaseDir,"plots","srv_sel.png"),plot = ff$single_model,device = "png",height = 6, width = 10,units = "in")
-ggsave(filename = file.path("plots","srv_sel_compare.png"),plot = ff$compare_models,device = "png",height = 6, width = 10,units = "in")
-ggsave(filename = file.path("plots","srv_sel_all_models.png"),plot = ff$all_models,device = "png",height = 6, width = 10,units = "in")
+ggsave(filename = file.path(BaseDir,plot_purpose,"srv_sel.png"),plot = ff$single_model,device = "png",height = 4, width = 7,units = "in")
+ggsave(filename = file.path(plot_purpose,"srv_sel_compare.png"),plot = ff$compare_models,device = "png",height = 4, width = 7,units = "in")
+ggsave(filename = file.path(plot_purpose,"srv_sel_all_models.png"),plot = ff$all_models,device = "png",height = 4, width = 7,units = "in")
 
 jj<-plot_sex_ratio(M = mylist, type = "Fishery") #I don't understand why this doesn't work
 ss<-plot_sex_ratio(M = mylist, type = "Survey") #I don't understand why this doesn't work
 pp <-plot_sex_ratio(M = mylist, type = "Population")
 
 all_sr<-jj/ss/pp
-ggsave(file.path("plots","sex_ratios.png"),plot = all_sr,width = 8, height = 10.5,units = "in",device = "png")
+ggsave(file.path(plot_purpose,"sex_ratios.png"),plot = all_sr,width = 8, height = 10.5,units = "in",device = "png")
 
 agg_comps_plot<-plot_agg_comps(the_runs=mylist,max_age=max_age) 
-ggsave(file.path("plots","aggregate_comps.png"),plot = agg_comps_plot,width = 11,height = 6,units = "in",device = "png")
+ggsave(file.path(plot_purpose,"aggregate_comps.png"),plot = agg_comps_plot,width = 7,height = 3,units = "in",device = "png")
 
 ii<-list()
 iii<-list()
@@ -334,45 +340,12 @@ library(TMB)
 #remotes::install_github("fishfollower/compResidual/compResidual", INSTALL_opts=c("--no-multiarch"), force=TRUE)
 
 library(compResidual)
+#idea for setting this up later
+source("C:/GitProjects/BSAI_NRS/R/get_osas.R", echo=TRUE)
+#puts plots into the folder for each run/plots
+get_osas_2(mylist,mydirs,max_age=20,type = "survey")
+get_osas_2(mylist,mydirs,max_age=20,type = "fishery")
 
-nsamp_vec<-t(mylist[[5]]$nsmpl_srv_s)
 
-
-
-obs_f<-mylist[[5]]$oac_srv_s[,1:20]
-obs_m<-mylist[[5]]$oac_srv_s[,21:40]
-eac_f<-mylist[[5]]$eac_srv_s[,1:20]
-eac_m<-mylist[[5]]$eac_srv_s[,21:40]
-
-new_obs_f<-matrix(nrow = nrow(obs_f),ncol = ncol(obs_f))
-for (i in 1:length(nsamp_vec)) {
- new_obs_f[i,]<- nsamp_vec[i]*obs_f[i,]
- new_obs_m[i,]<-nsamp_vec[i]*obs_m[i,]
- new_eac_f[i,]<-nsamp_vec[i]*eac_f[i,]
- new_eac_m[i,]<-nsamp_vec[i]*eac_m[i,]
-}
-
-res_f<-resMulti(t(obs_f),t(eac_f))
-
-#Fishery osa residuals
-nsamp_vec<-t(mylist[[5]]$nsmpl_fsh_s)
-
-obs_f<-mylist[[5]]$oac_fsh_s[,1:20]
-obs_m<-mylist[[5]]$oac_fsh_s[,21:40]
-eac_f<-mylist[[5]]$eac_fsh_s[,1:20]
-eac_m<-mylist[[5]]$eac_fsh_s[,21:40]
-
-new_obs_f<-matrix(nrow = nrow(obs_f),ncol = ncol(obs_f))
-new_obs_m<-matrix(nrow = nrow(obs_m),ncol = ncol(obs_m))
-new_eac_f<-matrix(nrow = nrow(eac_f),ncol = ncol(eac_f))
-new_eac_m<-matrix(nrow = nrow(eac_m),ncol = ncol(eac_m))
-for (i in 1:length(nsamp_vec)) {
-  new_obs_f[i,]<- round(nsamp_vec[i]*obs_f[i,])
-  new_obs_m[i,]<-round(nsamp_vec[i]*obs_m[i,])
-  new_eac_f[i,]<-round(nsamp_vec[i]*eac_f[i,])
-  new_eac_m[i,]<-round(nsamp_vec[i]*eac_m[i,])
-}
-
-res_f<-resMulti(new_obs_f,new_eac_f)
 
 
