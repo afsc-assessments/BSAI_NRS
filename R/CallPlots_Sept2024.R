@@ -32,8 +32,9 @@ codedir<-"C:/GitProjects/BSAI_NRS/R"
 maxage = 20
 endyr = 2024
 
-plot_purpose<-"plot_presentation"
+#plot_purpose<-"plot_presentation"
 #plot_purpose<-"plots"
+plot_purpose<-"sensitivity_plots"
 
 #source(file.path(codedir,"prelims.R")) #libraries and ggthemes - may need some refining
 source(file.path(codedir,"read-admb.R"))
@@ -61,9 +62,11 @@ mydirs$M24.1<-"c3mod4_francis_ISS_sept2024"
 mydirs$M24.2<-"c3mod5_ISS_francis_mq_sept2024"
 
 sens_dirs<-list()
+sens_dirs$M18.3_new<-"c1mod4_alldata_2022_sept2024"
 sens_dirs$M24.2<-"c3mod5_ISS_francis_mq_sept2024"
-sens_dirs$M24.2b<-"c3mod5_toms_ages"
-sens_dirs$M24.2c<-"c3mod5_LOO_fsh_ages"
+sens_dirs$extra_fshages<-"c3mod5_toms_ages"
+sens_dirs$wo_fshages<-"c3mod5_LOO_fsh_ages"
+sens_dirs$high_init_fdev<-"M24.2_high_init_fmort_dev"
 
 #Runs to compare
 m_2022<-read_admb("c1mod4_alldata_2022/fm")
@@ -74,6 +77,11 @@ m_francis_sept2024<-read_admb("c2mod4_francis_2022_sept2024/fm")
 m_iss_francis_sept2024<-read_admb("c3mod4_francis_ISS_sept2024/fm")
 m_iss_mq_sept2024<-read_admb("c3mod5_ISS_francis_mq_sept2024/fm")
 
+#sensitivities
+m_toms_ages<-read_admb("c3mod5_toms_ages/fm")
+m_LOO_fish_ages<-read_admb("c3mod5_LOO_fsh_ages/fm")
+m_high_init_fmort_dev<-read_admb("M24.2_high_init_fmort_dev/fm")
+
 mylist<-list()
 mylist$M18.3<-m_2022
 mylist$M18.3_new<-m_sept2024 #2022 accepted model with new data up to sept 2024
@@ -81,6 +89,13 @@ mylist$M22.1<-m_francis_sept2024 #2022 model with OFL used as a basis for the AB
 mylist$M24.1<-m_iss_francis_sept2024 #uses afscISS to define input sample sizes prior to applying Francis data weighting
 mylist$M24.2<-m_iss_mq_sept2024 #As for M24.1 but estimates female M and q with broad priors
 
+#sensitivities
+senslist<-list()
+senslist$M18.3_new<-m_sept2024
+senslist$M24.2<-m_iss_mq_sept2024
+senslist$extra_fshages<-m_toms_ages
+senslist$wo_fshages<-m_LOO_fish_ages
+senslist$high_init_fdev<-m_high_init_fmort_dev
 
 #Specify the base case
 BaseDir<-"c1mod4_alldata_2022_sept2024"
@@ -121,7 +136,7 @@ fshwts<-francis(repfile=m_iss_francis_sept2024,minage=1,maxage=20,nsexes=2,datat
 # write.csv(t(srvwts$NewNsamp),file = file.path("c3mod4_francis_ISS_sept2024","srvwts.csv"))
 # write.csv(t(fshwts$NewNsamp),file = file.path("c3mod4_francis_ISS_sept2024","fshwts.csv"))
 
-
+mylist<-senslist
 #Make and save plots (comparison plots and base case plots)
 a<-plot_catch(modlst=mylist,themod=1,obspred = FALSE)
 ggsave(filename = file.path(plot_purpose,"catch.png"),plot = a,device = "png",height = 5, width = 7,units = "in")
@@ -129,6 +144,7 @@ ggsave(filename = file.path(BaseDir,plot_purpose,"catch.png"),plot = a,device = 
 
 b<-plot_bts(M = mylist)
 bb<-plot_bts(M = BaseList)
+#bbb<-plot_bts(M = senslist)
 ggsave(filename = file.path(plot_purpose,"bts_compare.png"),plot = b,device = "png",height = 10, width = 9,units = "in")
 ggsave(filename = file.path(BaseDir,plot_purpose,"bts.png"),plot = bb,device = "png",height = 10, width = 9,units = "in")
 
@@ -175,13 +191,13 @@ for (i in 1:length(mylist)) {
   onelist$M<-mylist[[i]]
   gg<-plot_age_comps(M = onelist, xlab = "Age (yrs)", ylab = "Proportion", 
                            nages=maxage,type="fishery",sex="split",title="Fishery age compositions")
-  ggsave(filename = file.path(mydirs[[i]],"plots","age_comps_fsh.png"),plot = gg,device = "png",width = 11,height = 8.5,units = "in")
+  ggsave(filename = file.path(mydirs[[i]],plot_purpose,"age_comps_fsh.png"),plot = gg,device = "png",width = 11,height = 8.5,units = "in")
 
   hh<-plot_age_comps(M = onelist, xlab = "Age (yrs)", ylab = "Proportion", 
                nages=maxage,type="survey",sex="split",title="Survey age compositions")
-  ggsave(filename = file.path(mydirs[[i]],"plots","age_comps_srv.png"),plot = hh,device = "png",width = 11,height = 8.5,units = "in")
+  ggsave(filename = file.path(mydirs[[i]],plot_purpose,"age_comps_srv.png"),plot = hh,device = "png",width = 11,height = 8.5,units = "in")
 
-  zz<-plotFs(modlst=onelist,thismod = 1,thismodname = "M18.3")
+  zz<-plotFs(modlst=mylist,thismod = i,thismodname = names(mylist)[i])
   ggsave(file.path(mydirs[[i]],"plots","FatAge_MeanF.png"),plot=zz,width=8,height=8.0,units="in")
 
   ii[[i]]<-plot_fsh_sel(mod=mylist[[i]], title=names(mylist[i]),alpha=0.3,styr=1991,endyr=endyr,bysex=TRUE,sexoverlay=TRUE,legend_position = "bottom")
@@ -194,12 +210,15 @@ for (i in 1:length(mylist)) {
 }
 
 #for this plot might need to re-run ii above with legend_position = "none"
-all_fish_sel_plot<-ii[[2]] + ii[[4]] +ii[[5]]
-ggsave(filename = file.path("plots","fsh_sel.png"),plot = all_fish_sel_plot,device = "png",height = 8.5,width = 11)
+all_fish_sel_plot<-ii[[3]] + ii[[4]] +ii[[5]]
+
+#all_fish_sel_plot<-ii[[3]] + ii[[4]] +ii[[5]]
+ggsave(filename = file.path(plot_purpose,"fsh_sel.png"),plot = all_fish_sel_plot,device = "png",height = 8.5,width = 11)
 
 #early fishery selectivity
-early_fish_sel_plot<-iii[[2]] + iii[[4]] + iii[[5]]
-ggsave(filename = file.path("plots","early_fsh_sel.png"),plot = early_fish_sel_plot,device = "png",height = 8.5,width = 11)
+early_fish_sel_plot<-iii[[2]] + iii[[3]] + iii[[4]] + iii[[5]]
+#early_fish_sel_plot<- iii[[3]] + iii[[4]] + iii[[5]]
+ggsave(filename = file.path(plot_purpose,"early_fsh_sel.png"),plot = early_fish_sel_plot,device = "png",height = 8.5,width = 11)
 
 
 
