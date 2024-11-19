@@ -168,9 +168,9 @@ big_eac_t<-big_eac_t %>% mutate(exp_adj = expected*nadj)
 combo <- ggplot(big_eac_t) +
   geom_col(data = prop_oac_by_run[[1]],aes(x =  as.numeric(age), y =  prop),fill = "#FDE725FF",  alpha = 0.6) +
   geom_col(data = prop_oac_by_run[[2]],aes(x =  as.numeric(age), y =  prop),fill = "#7AD151FF",  alpha = 0.6) +
-  geom_col(data = prop_oac_by_run[[3]],aes(x =  as.numeric(age), y =  prop),fill = "#22A384FF",  alpha = 0.6) +
-  geom_col(data = prop_oac_by_run[[4]],aes(x =  as.numeric(age), y =  prop), fill = "#2A788EFF", alpha = 0.6) +
-  geom_col(data = prop_oac_by_run[[5]],aes(x =  as.numeric(age), y =  prop), fill = "#440154FF", alpha = 0.6) +
+   geom_col(data = prop_oac_by_run[[3]],aes(x =  as.numeric(age), y =  prop),fill = "#22A384FF",  alpha = 0.6) +
+  # geom_col(data = prop_oac_by_run[[4]],aes(x =  as.numeric(age), y =  prop), fill = "#2A788EFF", alpha = 0.6) +
+  # geom_col(data = prop_oac_by_run[[5]],aes(x =  as.numeric(age), y =  prop), fill = "#440154FF", alpha = 0.6) +
   
     #    geom_bar(aes(x =  Bin, y =  Obs,color =  mname),stat='identity', alpha = 0.4) +
   facet_grid(sex~type) +

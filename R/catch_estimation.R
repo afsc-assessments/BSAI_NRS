@@ -16,6 +16,8 @@ library(stringr)
 # council.comprehensive_blend_ca.species_group_code,
 # council.comprehensive_blend_ca.fmp_subarea,
 # council.comprehensive_blend_ca.species_name,
+# council.comprehensive_blend_ca.agency_gear_code,
+# council.comprehensive_blend_ca.reporting_area_code,
 # council.comprehensive_blend_ca.species_group_name
 # FROM
 # council.comprehensive_blend_ca
@@ -26,7 +28,13 @@ library(stringr)
 the_dir<-"C:\\Users\\carey.mcgilliard\\Work\\FlatfishAssessments\\2024\\bsai_nrs\\data\\fishery"
 run_dir<-"C:\\Users\\carey.mcgilliard\\Work\\FlatfishAssessments\\2024\\bsai_nrs\\"
 endyr<-2024
-the_data<-read.csv(file.path(the_dir,"bsai_nrs_catches_oct1_2024.csv"),header = TRUE) %>%
+
+#commented this out because the specs use data to Oct 1 and the fishery history tables use data to Oct 30 because needed to pull extra columns.
+# the_data<-read.csv(file.path(the_dir,"bsai_nrs_catches_oct1_2024.csv"),header = TRUE) %>%
+#   rename_with(tolower) %>%
+#   mutate(day = substring(week_end_date,1,2),month = substring(week_end_date,4,6))
+
+the_data<-read.csv(file.path(the_dir,"bsai_nrs_catches_oct30_2024.csv"),header = TRUE) %>%
   rename_with(tolower) %>%
   mutate(day = substring(week_end_date,1,2),month = substring(week_end_date,4,6))
 
@@ -77,7 +85,51 @@ write.csv(avg_catches,file = file.path(the_dir,"ten_yr_avg_catch.csv"))
 #enter estimated catches to tier 3 projection file
 exec<-make_exec_table(run_dir,endyr=2024,the_scalar=1000)
 
+#Make discards table
+discards_t<-the_data %>% group_by(year,retained_or_discarded) %>%
+            summarise(tot_catch = sum(weight_posted)) %>%
+            pivot_wider(names_from = retained_or_discarded,values_from=tot_catch) %>%
+            mutate(pct_retained = R/(R+D))
 
+write.csv(discards_t,file.path(mydir,"fishery","discards.csv"))
 
+#Explore gear
+gear_t<-the_data %>% group_by(year,agency_gear_code) %>%
+         summarise(tot_catch = sum(weight_posted)) %>%
+         pivot_wider(names_from = agency_gear_code,values_from = tot_catch) %>%
+         replace(is.na(.), 0)
 
+write.csv(gear_t,file.path(mydir,"fishery","gear.csv"))
+
+#Explore season
+season_t<-the_data %>% group_by(year,month_num) %>%
+          summarise(tot_catch = sum(weight_posted))
+
+yearly_t<-the_data %>% group_by(year) %>%
+          summarise(yearly_catch = sum(weight_posted))
+season_t<-season_t %>% left_join(yearly_t) %>% 
+          mutate(prop = tot_catch/yearly_catch) %>%
+          select(c(year,month_num,prop)) %>%
+          mutate(cum_prop = cumsum(prop)) %>%
+          ungroup()
+
+ cum_plot<-season_t %>% ggplot(aes(x=month_num, y=cum_prop,group = as.factor(year),color = as.factor(year))) +
+   geom_line() + ylab("Cumulative Proportion of Yearly Catch Biomass") + xlab("Month") 
+# 
+ ggsave(file.path(run_dir,"runs","plots","cum_catches.png"))
+
+#Explore fishing locations
+area_t<-the_data %>% group_by(year,reporting_area_code) %>%
+  summarise(tot_catch = sum(weight_posted)) %>%
+  full_join(yearly_t) %>%
+  mutate(prop = tot_catch/yearly_catch) %>%
+  replace(is.na(.), 0)
+
+area_wide_t <- area_t %>%
+  select(c(year,reporting_area_code,prop)) %>%
+  group_by(year) %>%
+  pivot_wider(names_from= reporting_area_code,values_from = prop) %>%
+  replace(is.na(.), 0)
+
+write.csv(area_wide_t,file.path(the_dir,"area.csv"))
 
