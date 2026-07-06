@@ -1,4 +1,4 @@
-# rex harvest projections 2024
+# bsai nrs harvest projections
 library(dplyr)
 library(spmR)
 library(tidyr)
@@ -6,37 +6,37 @@ library(ggplot2)
 library(stringr)
 
 # #read in weekly data:
-# SELECT
-# council.comprehensive_blend_ca.week_end_date,
-# council.comprehensive_blend_ca.retained_or_discarded,
-# council.comprehensive_blend_ca.weight_posted,
-# council.comprehensive_blend_ca.year,
-# council.comprehensive_blend_ca.fmp_area,
-# council.comprehensive_blend_ca.agency_species_code,
-# council.comprehensive_blend_ca.species_group_code,
-# council.comprehensive_blend_ca.fmp_subarea,
-# council.comprehensive_blend_ca.species_name,
-# council.comprehensive_blend_ca.agency_gear_code,
-# council.comprehensive_blend_ca.reporting_area_code,
-# council.comprehensive_blend_ca.species_group_name
-# FROM
-# council.comprehensive_blend_ca
-# WHERE
-# council.comprehensive_blend_ca.fmp_area = 'BSAI'
-# AND council.comprehensive_blend_ca.species_group_code = 'RSOL'
+SELECT
+council.comprehensive_blend_ca.week_end_date,
+council.comprehensive_blend_ca.retained_or_discarded,
+council.comprehensive_blend_ca.weight_posted,
+council.comprehensive_blend_ca.year,
+council.comprehensive_blend_ca.fmp_area,
+council.comprehensive_blend_ca.agency_species_code,
+council.comprehensive_blend_ca.species_group_code,
+council.comprehensive_blend_ca.fmp_subarea,
+council.comprehensive_blend_ca.species_name,
+council.comprehensive_blend_ca.agency_gear_code,
+council.comprehensive_blend_ca.reporting_area_code,
+council.comprehensive_blend_ca.species_group_name
+FROM
+council.comprehensive_blend_ca
+WHERE
+council.comprehensive_blend_ca.fmp_area = 'BSAI'
+AND council.comprehensive_blend_ca.species_group_code = 'RSOL'
 
-the_dir<-"C:\\Users\\carey.mcgilliard\\Work\\FlatfishAssessments\\2024\\bsai_nrs\\data\\fishery"
-run_dir<-"C:\\Users\\carey.mcgilliard\\Work\\FlatfishAssessments\\2024\\bsai_nrs\\"
-endyr<-2024
+the_dir<-"C:/Users/carey.mcgilliard/Work/FlatfishAssessments/2026/bsai_nrs/data/raw"
+run_dir<-"C:/Users/carey.mcgilliard/Work/FlatfishAssessments/2026/bsai_nrs/"
+endyr<-2026
 
-#commented this out because the specs use data to Oct 1 and the fishery history tables use data to Oct 30 because needed to pull extra columns.
+#commented this out because the 2024 specs use data to Oct 1 and the fishery history tables use data to Oct 30 because needed to pull extra columns.
 # the_data<-read.csv(file.path(the_dir,"bsai_nrs_catches_oct1_2024.csv"),header = TRUE) %>%
 #   rename_with(tolower) %>%
 #   mutate(day = substring(week_end_date,1,2),month = substring(week_end_date,4,6))
 
-the_data<-read.csv(file.path(the_dir,"bsai_nrs_catches_oct30_2024.csv"),header = TRUE) %>%
+the_data<-read.csv(file.path(the_dir,"bsai_nrs_weekly_catch_july_6.csv"),header = TRUE) %>%
   rename_with(tolower) %>%
-  mutate(day = substring(week_end_date,1,2),month = substring(week_end_date,4,6))
+  mutate(day = as.numeric(substring(week_end_date,1,2)),month = substring(week_end_date,4,6))
 
 the_months<-tibble(month_num = seq(from = 1, to = 12, by = 1),month = c("JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"))
 
@@ -54,11 +54,13 @@ end_month<-as.numeric(unique(late$month_num))
 
 endyr_dat<-the_data %>% filter(month_num>= end_month) %>%
   select(c(year,weight_posted)) %>%
+  filter(year<endyr) %>%
   group_by(year) %>%
   summarize(endyr_weight = sum(weight_posted))
 
 
 past_dat<-the_data %>% select(c(year,weight_posted)) %>%
+  filter(year<endyr) %>%
   group_by(year) %>%
   summarize(tot_weight = sum(weight_posted)) %>%
   left_join(endyr_dat) %>%

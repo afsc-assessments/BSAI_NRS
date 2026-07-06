@@ -1,0 +1,290 @@
+---
+title: 'Assessment of the northern rock sole Stock in the Bering Sea and Aleutian Islands'
+author:
+  - name: 'Carey McGilliard'
+    affiliations:
+      - name: 'NOAA Fisheries Alaska Fisheries Science Center'
+        address: '17109 Point Lena Loop Road'
+        city: 'Juneau, AK'
+        state: 'AK'
+        postal-code: '99801'
+date: today
+keep-tex: true 
+mainfont: 'Latin Modern Sans' 
+cover: 
+pdf-engine: lualatex
+format: 
+  pdf: 
+    documentclass: article
+    papersize: letter
+    number-sections: true
+    template-partials:
+      - 'support_files/before-body.tex'
+      - 'support_files/_titlepage.tex'
+    include-in-header:
+      - 'support_files/in-header.tex'
+    toc: true
+    sansfont: 'Latin Modern Sans'
+    lof: true
+    lot: true
+    titlepage-geometry: 
+      - top=2in
+      - bottom=1in
+      - right=1in
+      - left=1in
+output-file: 'northern_rock_sole_SAR_2026' 
+params:
+   office: 'AFSC'
+   species: 'northern rock sole'
+   spp_latin: ' Lepidopsetta polyxystra '
+   region: 'Bering Sea and Aleutian Islands'
+bibliography:  
+  - asar_references.bib
+csl: support_files/cjfas.csl
+---
+\printnoidxglossaries 
+
+```{r} 
+#| label: 'R_parameters'
+#| echo: false 
+#| warnings: false 
+#| eval: true
+# Parameters 
+spp <- params$species 
+SPP <- params$species 
+species <- params$species 
+spp_latin <- params$spp_latin 
+office <- params$office
+region <- params$region
+``` 
+
+```{r} 
+#| label: 'preamble'
+#| warning: false 
+#| eval: false 
+#| include: false
+# load converted output from stockplotr::convert_output() 
+
+# Call reference points and quantities below 
+output <- out_new |> 
+  dplyr::mutate(estimate = as.numeric(estimate), 
+    uncertainty = as.numeric(uncertainty)) 
+source("preamble.R") 
+# Available quantities
+start_year
+end_year
+Fend # terminal fishing mortality
+Ftarg # fishing mortality at msy
+F_Ftarg # Terminal year F respective to F target
+Bend # terminal year biomass
+Btarg # target biomass (msy)
+total_catch # total catch in the last year
+total_landings # total landings in the last year
+SBend # spawning biomass in the last year
+M # overall natural mortality or at age
+Bmsy # target spawning biomass(msy)
+h # steepness
+R0 # recruitment
+
+``` 
+
+{{< pagebreak >}}
+
+## Disclaimer {.unnumbered .unlisted}
+
+These materials do not constitute a formal publication and are for information only. They are in a pre-review, pre-decisional state and should not be formally cited or reproduced. They are to be considered provisional and do not represent any determination or policy of NOAA or the Department of Commerce.
+
+{{< pagebreak >}} 
+
+Please cite this publication as: 
+
+McGilliard, C. 2026. Assessment of the northern rock sole Stock in the Bering Sea and Aleutian Islands. North Pacific Fishery Management Council, Anchorage, AK. Available from https://www.npfmc.org/library/safe-reports/ \pageref*{LastPage}{} pp.
+
+ {{< pagebreak >}} 
+
+```{r, results='asis'}
+#| label: 'summary'
+#| eval: true
+#| echo: false
+#| warning: false
+a <- knitr::knit_child('01_summary.qmd', quiet = TRUE)
+cat(a, sep = '\n')
+```
+
+ {{< pagebreak >}} 
+
+```{r, results='asis'}
+#| label: 'main-table'
+#| eval: true
+#| echo: false
+#| warning: false
+a <- knitr::knit_child('01a_main-table.qmd', quiet = TRUE)
+cat(a, sep = '\n')
+```
+
+ {{< pagebreak >}} 
+
+```{r, results='asis'}
+#| label: 'apportionment'
+#| eval: true
+#| echo: false
+#| warning: false
+a <- knitr::knit_child('01b_apportionment.qmd', quiet = TRUE)
+cat(a, sep = '\n')
+```
+
+ {{< pagebreak >}} 
+
+```{r, results='asis'}
+#| label: 'plan-team'
+#| eval: true
+#| echo: false
+#| warning: false
+a <- knitr::knit_child('01c_plan-team.qmd', quiet = TRUE)
+cat(a, sep = '\n')
+```
+
+ {{< pagebreak >}} 
+
+```{r, results='asis'}
+#| label: 'responses'
+#| eval: true
+#| echo: false
+#| warning: false
+a <- knitr::knit_child('02_responses.qmd', quiet = TRUE)
+cat(a, sep = '\n')
+```
+
+ {{< pagebreak >}} 
+
+```{r, results='asis'}
+#| label: 'introduction'
+#| eval: true
+#| echo: false
+#| warning: false
+a <- knitr::knit_child('03_introduction.qmd', quiet = TRUE)
+cat(a, sep = '\n')
+```
+
+ {{< pagebreak >}} 
+
+```{r, results='asis'}
+#| label: 'fishery'
+#| eval: true
+#| echo: false
+#| warning: false
+a <- knitr::knit_child('04_fishery.qmd', quiet = TRUE)
+cat(a, sep = '\n')
+```
+
+ {{< pagebreak >}} 
+
+```{r, results='asis'}
+#| label: 'data'
+#| eval: true
+#| echo: false
+#| warning: false
+a <- knitr::knit_child('05_data.qmd', quiet = TRUE)
+cat(a, sep = '\n')
+```
+
+ {{< pagebreak >}} 
+
+```{r, results='asis'}
+#| label: 'model'
+#| eval: true
+#| echo: false
+#| warning: false
+a <- knitr::knit_child('06_model.qmd', quiet = TRUE)
+cat(a, sep = '\n')
+```
+
+ {{< pagebreak >}} 
+
+```{r, results='asis'}
+#| label: 'results'
+#| eval: true
+#| echo: false
+#| warning: false
+a <- knitr::knit_child('07_results.qmd', quiet = TRUE)
+cat(a, sep = '\n')
+```
+
+ {{< pagebreak >}} 
+
+```{r, results='asis'}
+#| label: 'abc'
+#| eval: true
+#| echo: false
+#| warning: false
+a <- knitr::knit_child('08_abc.qmd', quiet = TRUE)
+cat(a, sep = '\n')
+```
+
+ {{< pagebreak >}} 
+
+```{r, results='asis'}
+#| label: 'ecosystem'
+#| eval: true
+#| echo: false
+#| warning: false
+a <- knitr::knit_child('09_ecosystem.qmd', quiet = TRUE)
+cat(a, sep = '\n')
+```
+
+ {{< pagebreak >}} 
+
+```{r, results='asis'}
+#| label: 'gaps'
+#| eval: true
+#| echo: false
+#| warning: false
+a <- knitr::knit_child('10_gaps.qmd', quiet = TRUE)
+cat(a, sep = '\n')
+```
+
+ {{< pagebreak >}} 
+
+```{r, results='asis'}
+#| label: 'tables'
+#| eval: true
+#| echo: false
+#| warning: false
+a <- knitr::knit_child('11_tables.qmd', quiet = TRUE)
+cat(a, sep = '\n')
+# Force LaTeX to render all floating tables before moving to the next section
+cat('\n\\clearpage\n')
+```
+
+ {{< pagebreak >}} 
+
+```{r, results='asis'}
+#| label: 'figures'
+#| eval: true
+#| echo: false
+#| warning: false
+a <- knitr::knit_child('12_figures.qmd', quiet = TRUE)
+cat(a, sep = '\n')
+```
+
+ {{< pagebreak >}} 
+
+```{r, results='asis'}
+#| label: 'references'
+#| eval: true
+#| echo: false
+#| warning: false
+a <- knitr::knit_child('13_references.qmd', quiet = TRUE)
+cat(a, sep = '\n')
+```
+
+ {{< pagebreak >}} 
+
+```{r, results='asis'}
+#| label: 'appendix'
+#| eval: true
+#| echo: false
+#| warning: false
+a <- knitr::knit_child('14_appendix.qmd', quiet = TRUE)
+cat(a, sep = '\n')
+```
